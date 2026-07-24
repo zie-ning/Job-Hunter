@@ -1,0 +1,10 @@
+# 환경변수
+.env
+*.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Claude Code 로컬 개인 설정
+.claude/settings.local.json
