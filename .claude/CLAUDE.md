@@ -22,6 +22,35 @@
 - 각 단계에서 무엇을, 왜 했는지에 대한 설명을 생략하지 않는다. "간단히 처리했습니다" 같은 축약된 요약으로 끝내지 말고, 실제 변경 내용과 근거를 구체적으로 설명한다.
 - 이는 면접에서 기술적 의사결정 과정을 설명할 수 있어야 하는 포트폴리오 목적과 직결된다.
 
+## 개발 체크리스트
+
+CI([.github/workflows/backend-ci.yml](.github/workflows/backend-ci.yml), [.github/workflows/frontend-ci.yml](.github/workflows/frontend-ci.yml))가 검증하는 빌드·린트·포맷을 로컬에서 미리 재현해 CI 실패를 사전에 방지한다.
+
+**실행 시점**: 파일을 고칠 때마다 매번 돌리지 않는다. 아래 두 조건을 모두 만족할 때만 실행한다.
+- `backend/` 또는 `frontend/`의 실제 코드를 수정했다 (문서·설정 전용 변경 제외)
+- 하나의 작업(task) 단위 구현을 마무리하는 시점이다 (작업 중간 단계마다 반복하지 않음)
+
+수정 범위에 맞는 쪽만 실행한다 — `backend/`만 고쳤으면 백엔드만, `frontend/`만 고쳤으면 프론트엔드만, 둘 다 고쳤으면 둘 다.
+
+### 백엔드 (`backend/` 변경 시)
+로컬 가상환경에 `requirements-dev.txt`가 설치되어 있어야 한다.
+```
+cd backend
+ruff check .
+ruff format --check .
+python -c "from app.main import app"
+```
+
+### 프론트엔드 (`frontend/` 변경 시)
+```
+cd frontend
+npm run lint
+npm run format:check
+npm run build
+```
+
+검증 실패 시 자동 수정 가능한 것(`ruff check --fix`, `ruff format`, `npm run format`)은 적용 후 재검증하고, 그 외 오류는 코드를 고쳐 재검증한다.
+
 ## 개선점 발견 시 처리 방식
 
 작업 중 단순 구현을 넘어 포트폴리오에서 어필 가능한 개선점(테스트/CI 강화, 코드 품질 자동화, 아키텍처 개선, 성능 개선 사항, 트러플 슈팅, 기술적 의사결정 포인트 등)을 발견하면 **코드를 임의로 고치지 말고**, 최종 응답에서 제안 형태로 전달한다.
