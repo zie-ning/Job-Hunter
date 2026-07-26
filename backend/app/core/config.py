@@ -13,7 +13,14 @@ class Settings(BaseSettings):
 
     # 인증
     secret_key: str = "dev-secret-key-change-me"
-    access_token_expire_minutes: int = 60 * 24
+    jwt_algorithm: str = "HS256"
+    access_token_expire_minutes: int = 30
+    refresh_token_expire_days: int = 30
+
+    # 카카오 로그인
+    kakao_client_id: str = ""
+    kakao_client_secret: str = ""
+    kakao_redirect_uri: str = ""
 
     # OpenAI
     openai_api_key: str = ""
