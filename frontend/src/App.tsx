@@ -6,6 +6,7 @@ import { LoginPage } from "./routes/LoginPage";
 import { SignupPage } from "./routes/SignupPage";
 import { ResumePage } from "./routes/ResumePage";
 import { ResumeVersionDetailPage } from "./routes/ResumeVersionDetailPage";
+import { MatchesPage } from "./routes/MatchesPage";
 
 function PlaceholderPage({ title }: { title: string }) {
   return (
@@ -29,7 +30,7 @@ function App() {
           path="/resumes/versions/:id"
           element={<ResumeVersionDetailPage />}
         />
-        <Route path="/matches" element={<PlaceholderPage title="JD 매칭" />} />
+        <Route path="/matches" element={<MatchesPage />} />
         <Route
           path="/branches"
           element={<PlaceholderPage title="브랜치 목록" />}

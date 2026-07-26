@@ -272,3 +272,33 @@
   display: flex;
   justify-content: flex-end;
 }
+
+.match-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+.match-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.match-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.match-title {
+  color: var(--text);
+  font-size: 14px;
+  margin: 4px 0 0;
+}
+.match-score {
+  font-weight: 500;
+  color: var(--accent);
+}
+.match-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
