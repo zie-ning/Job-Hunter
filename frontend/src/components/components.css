@@ -216,3 +216,49 @@
   font-size: 14px;
   text-align: center;
 }
+
+.resume-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.resume-editor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.resume-reupload {
+  font-size: 13px;
+  color: var(--accent);
+  cursor: pointer;
+}
+.resume-editor-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
+}
+.version-list {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.version-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--text-h);
+}
+.version-item:hover {
+  border-color: var(--accent-border);
+}
+.version-meta {
+  color: var(--text);
+  font-size: 13px;
+}

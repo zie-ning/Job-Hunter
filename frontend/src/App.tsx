@@ -4,6 +4,7 @@ import { Card } from "./components/Card";
 import { EmptyState } from "./components/EmptyState";
 import { LoginPage } from "./routes/LoginPage";
 import { SignupPage } from "./routes/SignupPage";
+import { ResumePage } from "./routes/ResumePage";
 
 function PlaceholderPage({ title }: { title: string }) {
   return (
@@ -22,10 +23,7 @@ function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<SignupPage />} />
       <Route element={<AppLayout />}>
-        <Route
-          path="/resumes"
-          element={<PlaceholderPage title="이력서 관리" />}
-        />
+        <Route path="/resumes" element={<ResumePage />} />
         <Route
           path="/resumes/versions/:id"
           element={<PlaceholderPage title="버전 상세" />}
