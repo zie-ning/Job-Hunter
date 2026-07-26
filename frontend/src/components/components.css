@@ -302,3 +302,44 @@
   flex-wrap: wrap;
   gap: 6px;
 }
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+.modal-content {
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 24px;
+  width: 360px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.modal-version-list {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.modal-version-item {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  cursor: pointer;
+  font: inherit;
+  color: var(--text-h);
+}
+.modal-version-item:hover {
+  border-color: var(--accent-border);
+}
