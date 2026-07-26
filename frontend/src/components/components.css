@@ -262,3 +262,13 @@
   color: var(--text);
   font-size: 13px;
 }
+
+.version-detail-page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.version-detail-actions {
+  display: flex;
+  justify-content: flex-end;
+}

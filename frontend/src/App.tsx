@@ -5,6 +5,7 @@ import { EmptyState } from "./components/EmptyState";
 import { LoginPage } from "./routes/LoginPage";
 import { SignupPage } from "./routes/SignupPage";
 import { ResumePage } from "./routes/ResumePage";
+import { ResumeVersionDetailPage } from "./routes/ResumeVersionDetailPage";
 
 function PlaceholderPage({ title }: { title: string }) {
   return (
@@ -26,7 +27,7 @@ function App() {
         <Route path="/resumes" element={<ResumePage />} />
         <Route
           path="/resumes/versions/:id"
-          element={<PlaceholderPage title="버전 상세" />}
+          element={<ResumeVersionDetailPage />}
         />
         <Route path="/matches" element={<PlaceholderPage title="JD 매칭" />} />
         <Route
