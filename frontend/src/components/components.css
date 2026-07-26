@@ -343,3 +343,38 @@
 .modal-version-item:hover {
   border-color: var(--accent-border);
 }
+
+.branches-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.branch-filter {
+  display: flex;
+  gap: 8px;
+}
+.branch-filter-btn {
+  font: inherit;
+  font-size: 13px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+.branch-filter-btn.active {
+  background: var(--accent-bg);
+  border-color: var(--accent-border);
+  color: var(--text-h);
+}
+.branch-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.branch-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
