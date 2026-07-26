@@ -1,0 +1,12 @@
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+# B008: FastAPI의 Depends(...)를 기본 인자로 쓰는 것은 프레임워크가 의도한 표준 패턴이라 예외 처리한다.
+ignore = ["B008"]
+
+[tool.ruff.lint.per-file-ignores]
+# Alembic이 생성하는 마이그레이션 파일은 도구가 만든 그대로 유지하고, 줄 길이 규칙만 예외로 둔다.
+"alembic/versions/*.py" = ["E501"]

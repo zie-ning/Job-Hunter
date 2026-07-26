@@ -21,7 +21,8 @@ async def exchange_code_for_token(code: str) -> str:
         "redirect_uri": settings.kakao_redirect_uri,
         "code": code,
     }
-    # client_secret은 카카오 콘솔에서 "Client Secret 사용"을 켠 경우에만 존재하므로, 있을 때만 포함한다.
+    # client_secret은 카카오 콘솔에서 "Client Secret 사용"을 켠 경우에만
+    # 존재하므로, 있을 때만 포함한다.
     if settings.kakao_client_secret:
         data["client_secret"] = settings.kakao_client_secret
 

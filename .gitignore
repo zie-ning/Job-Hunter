@@ -8,3 +8,4 @@ Thumbs.db
 
 # Claude Code 로컬 개인 설정
 .claude/settings.local.json
+.claude/worktrees/

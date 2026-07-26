@@ -2,6 +2,24 @@
 
 이 문서는 클로드 코드가 이 저장소에서 PR을 작성할 때 참고하는 규칙이다. 템플릿은 [.github/pull_request_template.md](../../.github/pull_request_template.md)를 따른다.
 
+## 제목
+
+`<타입>: <작업 요약>` 형식으로 작성한다.
+
+예: `docs: 개발 로드맵 문서 작성`
+
+**타입:**
+
+- `feat`: 새로운 기능
+- `fix`: 버그 수정
+- `docs`: 문서화
+- `style`: 포맷팅
+- `refactor`: 코드 리팩토링
+- `perf`: 성능 개선
+- `test`: 테스트
+- `chore`: 빌드/도구
+- `ci`: CI 관련 설정 수정에 대한 커밋
+
 ```
 ## 🛰️ Issue Number
 

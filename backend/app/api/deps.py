@@ -20,8 +20,8 @@ async def get_current_user(
     token = authorization.removeprefix("Bearer ").strip()
     try:
         payload = decode_access_token(token)
-    except jwt.PyJWTError:
-        raise HTTPException(status_code=401, detail="Invalid or expired token")
+    except jwt.PyJWTError as exc:
+        raise HTTPException(status_code=401, detail="Invalid or expired token") from exc
 
     if payload.get("type") != "access":
         raise HTTPException(status_code=401, detail="Invalid token type")

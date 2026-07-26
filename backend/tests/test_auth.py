@@ -108,8 +108,11 @@ async def test_logout_revokes_refresh_token(client):
     logout = await client.post("/auth/logout")
     assert logout.status_code == 204
 
-    # 로그아웃 후에는 클라이언트가 쿠키를 지웠더라도, 서버에 남아있던 refresh token 자체가 무효화되어 있어야 한다.
-    reuse_after_logout = await client.post("/auth/refresh", cookies={"refresh_token": refresh_token})
+    # 로그아웃 후에는 클라이언트가 쿠키를 지웠더라도,
+    # 서버에 남아있던 refresh token 자체가 무효화되어 있어야 한다.
+    reuse_after_logout = await client.post(
+        "/auth/refresh", cookies={"refresh_token": refresh_token}
+    )
     assert reuse_after_logout.status_code == 401
 
 

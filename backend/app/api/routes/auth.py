@@ -48,7 +48,7 @@ async def kakao_callback(
         kakao_access_token = await kakao.exchange_code_for_token(body.code)
         profile = await kakao.fetch_kakao_profile(kakao_access_token)
     except kakao.KakaoAuthError as exc:
-        raise HTTPException(status_code=401, detail=str(exc))
+        raise HTTPException(status_code=401, detail=str(exc)) from exc
 
     user = await upsert_kakao_user(
         db,

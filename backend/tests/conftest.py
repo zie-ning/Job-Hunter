@@ -13,7 +13,8 @@ from app.main import app as fastapi_app
 @pytest.fixture
 async def client() -> AsyncGenerator[httpx.AsyncClient, None]:
     # SQLite 인메모리 DB. sqlalchemy.Uuid 타입 채택 덕분에 Postgres 전용 타입 없이도 동작한다.
-    # 인메모리 DB는 연결마다 별개이므로 StaticPool로 단일 연결을 공유해야 테스트 중 데이터가 유지된다.
+    # 인메모리 DB는 연결마다 별개이므로 StaticPool로 단일 연결을 공유해야
+    # 테스트 중 데이터가 유지된다.
     engine = create_async_engine(
         "sqlite+aiosqlite:///:memory:",
         connect_args={"check_same_thread": False},
