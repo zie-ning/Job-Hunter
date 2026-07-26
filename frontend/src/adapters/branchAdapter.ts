@@ -1,11 +1,13 @@
 import { mockDelay, mockStore } from "./mockStore";
-import type { Branch } from "./types";
+import type { Branch, GapAnalysisResult } from "./types";
 
 export interface BranchAdapter {
   getBranches(): Promise<Branch[]>;
   getBranch(id: string): Promise<Branch>;
   findBranchByJdMatchId(jdMatchId: string): Promise<Branch | null>;
   createBranch(jdMatchId: string, baseVersionId: string): Promise<Branch>;
+  getGapAnalysis(branchId: string): Promise<GapAnalysisResult | null>;
+  requestGapAnalysis(branchId: string): Promise<GapAnalysisResult>;
 }
 
 export const mockBranchAdapter: BranchAdapter = {
@@ -50,5 +52,34 @@ export const mockBranchAdapter: BranchAdapter = {
     db.branches.push(newBranch);
     mockStore.setDb(db);
     return mockDelay(newBranch);
+  },
+  async getGapAnalysis(branchId) {
+    const db = mockStore.getDb();
+    return mockDelay(
+      db.gapAnalyses.find((g) => g.branchId === branchId) ?? null,
+    );
+  },
+  async requestGapAnalysis(branchId) {
+    const db = mockStore.getDb();
+    const result: GapAnalysisResult = {
+      branchId,
+      gaps: [
+        "이 JD가 요구하는 핵심 기술스택 중 일부가 이력서에 구체적으로 드러나지 않습니다.",
+        "관련 프로젝트의 정량적 성과(지표)가 부족합니다.",
+      ],
+      feedback:
+        "이력서의 프로젝트 경험 섹션에 이 공고가 요구하는 기술스택을 사용한 구체적인 사례와 수치화된 성과를 추가하면 매칭도가 높아집니다.",
+      generatedAt: new Date().toISOString(),
+    };
+    const existingIndex = db.gapAnalyses.findIndex(
+      (g) => g.branchId === branchId,
+    );
+    if (existingIndex >= 0) {
+      db.gapAnalyses[existingIndex] = result;
+    } else {
+      db.gapAnalyses.push(result);
+    }
+    mockStore.setDb(db);
+    return mockDelay(result, 800);
   },
 };
