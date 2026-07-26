@@ -1,0 +1,151 @@
+.btn {
+  font: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    opacity 0.15s;
+}
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+.btn-primary:hover:not(:disabled) {
+  border-color: var(--accent-border);
+}
+.btn-secondary {
+  background: transparent;
+  border-color: var(--border);
+  color: var(--text-h);
+}
+.btn-secondary:hover:not(:disabled) {
+  border-color: var(--accent-border);
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--text);
+}
+.btn-ghost:hover:not(:disabled) {
+  background: var(--accent-bg);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+.field label {
+  font-size: 13px;
+  color: var(--text);
+}
+.field input,
+.field textarea {
+  font: inherit;
+  font-size: 15px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-h);
+}
+.field input:focus-visible,
+.field textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+.field textarea {
+  resize: vertical;
+  min-height: 160px;
+  font-family: var(--mono);
+  font-size: 14px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: left;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+.badge-positive {
+  background: var(--positive-bg);
+  color: var(--positive);
+}
+.badge-warning {
+  background: var(--warning-bg);
+  color: var(--warning);
+}
+.badge-danger {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+.badge-neutral {
+  background: var(--code-bg);
+  color: var(--neutral-muted);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 48px 20px;
+  color: var(--text);
+}
+.empty-state h3 {
+  font-size: 18px;
+  color: var(--text-h);
+  margin: 0 0 8px;
+}
+
+.score-delta {
+  font-weight: 500;
+  font-size: 14px;
+}
+.score-delta-up {
+  color: var(--positive);
+}
+.score-delta-down {
+  color: var(--danger);
+}
+.score-delta-flat {
+  color: var(--neutral-muted);
+}
+
+.diff-view {
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 160%;
+  text-align: left;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.diff-line {
+  padding: 2px 12px;
+  white-space: pre-wrap;
+}
+.diff-line-added {
+  background: var(--positive-bg);
+  color: var(--positive);
+}
+.diff-line-removed {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
