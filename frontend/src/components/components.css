@@ -191,3 +191,28 @@
   margin: 0 auto;
   box-sizing: border-box;
 }
+
+.auth-page {
+  display: flex;
+  justify-content: center;
+  padding: 64px 20px;
+}
+.auth-page .card {
+  width: 360px;
+}
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 20px;
+}
+.auth-error {
+  color: var(--danger);
+  font-size: 13px;
+  margin: 0;
+}
+.auth-switch {
+  margin-top: 16px;
+  font-size: 14px;
+  text-align: center;
+}

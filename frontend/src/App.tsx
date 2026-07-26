@@ -2,6 +2,8 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { AppLayout } from "./layout/AppLayout";
 import { Card } from "./components/Card";
 import { EmptyState } from "./components/EmptyState";
+import { LoginPage } from "./routes/LoginPage";
+import { SignupPage } from "./routes/SignupPage";
 
 function PlaceholderPage({ title }: { title: string }) {
   return (
@@ -17,8 +19,8 @@ function PlaceholderPage({ title }: { title: string }) {
 function App() {
   return (
     <Routes>
-      <Route path="/login" element={<PlaceholderPage title="로그인" />} />
-      <Route path="/signup" element={<PlaceholderPage title="회원가입" />} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/signup" element={<SignupPage />} />
       <Route element={<AppLayout />}>
         <Route
           path="/resumes"
