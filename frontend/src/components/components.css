@@ -149,3 +149,45 @@
   background: var(--danger-bg);
   color: var(--danger);
 }
+
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border);
+}
+.app-header-logo {
+  font-weight: 500;
+  color: var(--text-h);
+}
+.app-header-nav {
+  display: flex;
+  gap: 20px;
+  flex: 1;
+}
+.app-header-link {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 15px;
+  padding: 6px 0;
+  border-bottom: 2px solid transparent;
+}
+.app-header-link.active {
+  color: var(--text-h);
+  border-bottom-color: var(--accent);
+}
+
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+}
+.app-main {
+  flex: 1;
+  padding: 32px 24px;
+  max-width: 960px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
