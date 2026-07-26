@@ -2017,14 +2017,35 @@ EOF
 ## Task 9: 브랜치 목록 화면
 
 **Files:**
+- Create: `frontend/src/lib/branchStatus.ts`
 - Create: `frontend/src/routes/BranchesPage.tsx`
 - Modify: `frontend/src/App.tsx` (`/branches` placeholder 교체)
 
 **Interfaces:**
 - Consumes: `mockBranchAdapter.getBranches()`(Task 8), `mockMatchAdapter.getMatches()`(Task 7), `Card`, `Badge`, `EmptyState`(Task 2).
-- Produces: 없음(터미널 화면).
+- Produces: `BRANCH_STATUS_LABEL: Record<BranchStatus, string>`, `BRANCH_STATUS_TONE: Record<BranchStatus, "warning" | "positive" | "neutral">`(`lib/branchStatus.ts`). 브랜치 상태를 화면에 표시해야 하는 모든 화면이 이 상수를 공유한다 — Task 10의 `BranchDetailPage`도 이 파일을 import해서 쓰며, 별도로 재정의하지 않는다.
 
-- [ ] **Step 1: `BranchesPage.tsx` 작성**
+- [ ] **Step 1: `branchStatus.ts` 작성**
+
+`BranchesPage.tsx`와 Task 10의 `BranchDetailPage.tsx`가 동일한 상태 레이블/톤 매핑이 필요하므로, 두 화면에 각각 정의하지 않고 공유 모듈로 추출한다.
+
+```ts
+import type { BranchStatus } from "../adapters/types";
+
+export const BRANCH_STATUS_LABEL: Record<BranchStatus, string> = {
+  in_progress: "진행중",
+  applied: "지원완료",
+  closed: "마감",
+};
+
+export const BRANCH_STATUS_TONE: Record<BranchStatus, "warning" | "positive" | "neutral"> = {
+  in_progress: "warning",
+  applied: "positive",
+  closed: "neutral",
+};
+```
+
+- [ ] **Step 2: `BranchesPage.tsx` 작성**
 
 브랜치는 JD 정보를 직접 갖지 않으므로(스펙의 `jdMatchId` 참조 구조) 매칭 목록과 조인해서 회사/직무명을 표시한다.
 
@@ -2034,21 +2055,10 @@ import { Link } from "react-router-dom";
 import { mockBranchAdapter } from "../adapters/branchAdapter";
 import { mockMatchAdapter } from "../adapters/matchAdapter";
 import type { Branch, BranchStatus, JdMatch } from "../adapters/types";
+import { BRANCH_STATUS_LABEL, BRANCH_STATUS_TONE } from "../lib/branchStatus";
 import { Card } from "../components/Card";
 import { Badge } from "../components/Badge";
 import { EmptyState } from "../components/EmptyState";
-
-const STATUS_LABEL: Record<BranchStatus, string> = {
-  in_progress: "진행중",
-  applied: "지원완료",
-  closed: "마감",
-};
-
-const STATUS_TONE: Record<BranchStatus, "warning" | "positive" | "neutral"> = {
-  in_progress: "warning",
-  applied: "positive",
-  closed: "neutral",
-};
 
 const STATUS_FILTERS: Array<BranchStatus | "all"> = ["all", "in_progress", "applied", "closed"];
 
@@ -2091,7 +2101,7 @@ export function BranchesPage() {
             className={filter === status ? "branch-filter-btn active" : "branch-filter-btn"}
             onClick={() => setFilter(status)}
           >
-            {status === "all" ? "전체" : STATUS_LABEL[status]}
+            {status === "all" ? "전체" : BRANCH_STATUS_LABEL[status]}
           </button>
         ))}
       </div>
@@ -2105,7 +2115,9 @@ export function BranchesPage() {
                   <h3>{match?.company ?? "알 수 없는 공고"}</h3>
                   <p className="match-title">{match?.title}</p>
                 </div>
-                <Badge tone={STATUS_TONE[branch.status]}>{STATUS_LABEL[branch.status]}</Badge>
+                <Badge tone={BRANCH_STATUS_TONE[branch.status]}>
+                  {BRANCH_STATUS_LABEL[branch.status]}
+                </Badge>
               </Card>
             </Link>
           );
@@ -2155,7 +2167,7 @@ export function BranchesPage() {
 }
 ```
 
-- [ ] **Step 2: `App.tsx`에서 `/branches` placeholder 교체**
+- [ ] **Step 3: `App.tsx`에서 `/branches` placeholder 교체**
 
 ```tsx
 import { BranchesPage } from "./routes/BranchesPage";
@@ -2163,26 +2175,31 @@ import { BranchesPage } from "./routes/BranchesPage";
 
 `<Route path="/branches" element={<PlaceholderPage title="브랜치 목록" />} />`를 `<Route path="/branches" element={<BranchesPage />} />`로 교체한다.
 
-- [ ] **Step 3: 빌드 확인**
+- [ ] **Step 4: 빌드 확인**
 
 Run: `cd frontend && npm run build`
 
-- [ ] **Step 4: 브라우저 확인**
+- [ ] **Step 5: 브라우저 확인**
 
 `/branches`에서:
 1. 시드된 2개 브랜치(원티드랩=진행중, 당근마켓=지원완료)가 목록에 보이는지 확인
 2. 상태 필터 버튼을 클릭해 목록이 필터링되는지 확인
 3. Task 8에서 새로 만든 브랜치도 목록에 나타나는지 확인
 
-- [ ] **Step 5: lint/format 확인**
+- [ ] **Step 6: lint/format 확인**
 
 Run: `cd frontend && npm run lint && npm run format:check`
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 7: Commit**
 
 ```bash
 git add frontend/src
-git commit -m "feat: 브랜치 목록 화면(상태 필터) 추가"
+git commit -m "$(cat <<'EOF'
+feat: 브랜치 목록 화면(상태 필터) 추가
+
+- BranchStatus 레이블/톤 매핑을 lib/branchStatus.ts로 공유해 다음 작업의 브랜치 상세 화면과 중복 없이 재사용
+EOF
+)"
 ```
 
 ---
@@ -2196,7 +2213,7 @@ git commit -m "feat: 브랜치 목록 화면(상태 필터) 추가"
 - Modify: `frontend/src/App.tsx` (`/branches/:id` placeholder 교체)
 
 **Interfaces:**
-- Consumes: `mockBranchAdapter.getBranch()`(Task 8), `mockMatchAdapter.getMatches()`(Task 7), `ScoreDelta`, `Badge`, `Card`, `Button`(Task 2).
+- Consumes: `mockBranchAdapter.getBranch()`(Task 8), `mockMatchAdapter.getMatches()`(Task 7), `ScoreDelta`, `Badge`, `Card`, `Button`(Task 2), `BRANCH_STATUS_LABEL`/`BRANCH_STATUS_TONE`(`lib/branchStatus.ts`, Task 9 — 이 화면은 상태 레이블/톤을 다시 정의하지 않고 반드시 이 모듈에서 import한다).
 - Produces: `BranchAdapter`에 `getGapAnalysis(branchId): Promise<GapAnalysisResult | null>`, `requestGapAnalysis(branchId): Promise<GapAnalysisResult>` 추가. 이 Task로 로드맵 Phase 2의 마지막 화면 항목이 완성된다.
 
 - [ ] **Step 1: `branchAdapter.ts`에 갭분석 메서드 추가**
@@ -2335,23 +2352,12 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { mockBranchAdapter } from "../adapters/branchAdapter";
 import { mockMatchAdapter } from "../adapters/matchAdapter";
-import type { Branch, BranchStatus, GapAnalysisResult, JdMatch } from "../adapters/types";
+import type { Branch, GapAnalysisResult, JdMatch } from "../adapters/types";
+import { BRANCH_STATUS_LABEL, BRANCH_STATUS_TONE } from "../lib/branchStatus";
 import { Card } from "../components/Card";
 import { Badge } from "../components/Badge";
 import { ScoreDelta } from "../components/ScoreDelta";
 import { GapAnalysisSection } from "../components/GapAnalysisSection";
-
-const STATUS_LABEL: Record<BranchStatus, string> = {
-  in_progress: "진행중",
-  applied: "지원완료",
-  closed: "마감",
-};
-
-const STATUS_TONE: Record<BranchStatus, "warning" | "positive" | "neutral"> = {
-  in_progress: "warning",
-  applied: "positive",
-  closed: "neutral",
-};
 
 export function BranchDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -2383,7 +2389,9 @@ export function BranchDetailPage() {
             <h2>{match?.company ?? "알 수 없는 공고"}</h2>
             <p className="match-title">{match?.title}</p>
           </div>
-          <Badge tone={STATUS_TONE[branch.status]}>{STATUS_LABEL[branch.status]}</Badge>
+          <Badge tone={BRANCH_STATUS_TONE[branch.status]}>
+            {BRANCH_STATUS_LABEL[branch.status]}
+          </Badge>
         </div>
 
         <h3>버전 이력 (개선도)</h3>
