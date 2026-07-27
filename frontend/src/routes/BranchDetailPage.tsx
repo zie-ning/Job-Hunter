@@ -24,9 +24,11 @@ export function BranchDetailPage() {
   useEffect(() => {
     if (!id) return;
     void (async () => {
-      const branchResult = await mockBranchAdapter.getBranch(id);
+      const [branchResult, matches] = await Promise.all([
+        mockBranchAdapter.getBranch(id),
+        mockMatchAdapter.getMatches(),
+      ]);
       setBranch(branchResult);
-      const matches = await mockMatchAdapter.getMatches();
       setMatch(matches.find((m) => m.id === branchResult.jdMatchId) ?? null);
       const gap = await mockBranchAdapter.getGapAnalysis(id);
       setGapAnalysis(gap);
