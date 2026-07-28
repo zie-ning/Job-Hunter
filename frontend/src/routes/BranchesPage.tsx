@@ -67,9 +67,7 @@ export function BranchesPage() {
 
   const generalBranches = useMemo(
     () =>
-      (branches ?? []).filter(
-        (b): b is GeneralBranch => b.kind === "general",
-      ),
+      (branches ?? []).filter((b): b is GeneralBranch => b.kind === "general"),
     [branches],
   );
   const defaultBranch = generalBranches.find((b) => b.isDefault) ?? null;
@@ -158,8 +156,8 @@ export function BranchesPage() {
 
         {orderedGeneralBranches.length === 0 ? (
           <p className="branch-section-empty">
-            아직 범용 브랜치가 없습니다. "새 브랜치 만들기"로 마스터
-            이력서를 만들어보세요.
+            아직 범용 브랜치가 없습니다. "새 브랜치 만들기"로 마스터 이력서를
+            만들어보세요.
           </p>
         ) : (
           <div className="branch-general-strip">
@@ -264,9 +262,7 @@ export function BranchesPage() {
                   )}
                   <div className="branch-card-meta">
                     {match && (
-                      <span className="match-score">
-                        {match.matchScore}점
-                      </span>
+                      <span className="match-score">{match.matchScore}점</span>
                     )}
                     <span>최근 수정 {lastModified(branch)}</span>
                     {match && <span>마감 {formatDate(match.deadline)}</span>}

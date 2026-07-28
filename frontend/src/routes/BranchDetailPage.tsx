@@ -27,9 +27,9 @@ export function BranchDetailPage() {
   const [branch, setBranch] = useState<Branch | null>(null);
   const [match, setMatch] = useState<JdMatch | null>(null);
   // undefined: 아직 조회 전, [] : 조회 완료했으나 내역 없음.
-  const [gapHistory, setGapHistory] = useState<
-    GapAnalysisResult[] | undefined
-  >(undefined);
+  const [gapHistory, setGapHistory] = useState<GapAnalysisResult[] | undefined>(
+    undefined,
+  );
   const [content, setContent] = useState("");
   const [comment, setComment] = useState("");
   const [isSaving, setIsSaving] = useState(false);
@@ -53,9 +53,7 @@ export function BranchDetailPage() {
         ? (matches.find((m) => m.id === branchResult.jdMatchId) ?? null)
         : null,
     );
-    setContent(
-      branchResult.versions[branchResult.versions.length - 1].content,
-    );
+    setContent(branchResult.versions[branchResult.versions.length - 1].content);
     setGapHistory(history);
   }
 
@@ -108,9 +106,7 @@ export function BranchDetailPage() {
     setIsRequestingFeedback(true);
     try {
       await mockBranchAdapter.requestGapAnalysis(branch.id);
-      const history = await mockBranchAdapter.getGapAnalysisHistory(
-        branch.id,
-      );
+      const history = await mockBranchAdapter.getGapAnalysisHistory(branch.id);
       setGapHistory(history);
     } finally {
       setIsRequestingFeedback(false);
@@ -165,11 +161,7 @@ export function BranchDetailPage() {
                 <dt>공고 링크</dt>
                 <dd>
                   {match?.applyUrl ? (
-                    <a
-                      href={match.applyUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
+                    <a href={match.applyUrl} target="_blank" rel="noreferrer">
                       공고 보기 ↗
                     </a>
                   ) : (

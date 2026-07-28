@@ -2,7 +2,8 @@ import { useState } from "react";
 import type { Branch, JdMatch } from "../adapters/types";
 import { Button } from "./Button";
 
-export type ForkChoice = { type: "fresh" } | { type: "branch"; branchId: string };
+export type ForkChoice =
+  { type: "fresh" } | { type: "branch"; branchId: string };
 
 export function resolveForkContent(
   choice: ForkChoice,
@@ -110,9 +111,7 @@ export function BranchForkPicker({
                 <span>{branchLabel(branch, matches)}</span>
                 <span className="version-meta">
                   최근 수정{" "}
-                  {new Date(lastModifiedAt(branch)).toLocaleDateString(
-                    "ko-KR",
-                  )}
+                  {new Date(lastModifiedAt(branch)).toLocaleDateString("ko-KR")}
                 </span>
               </button>
             </li>

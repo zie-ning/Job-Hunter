@@ -47,7 +47,8 @@ function seedDb(): MockDb {
       matchScore: 81,
       source: "worknet",
       deadline: daysFromNow(9),
-      applyUrl: "https://www.work24.go.kr/wk/a/b/1200/retriveDtlEmpSrchList.do?jobId=3",
+      applyUrl:
+        "https://www.work24.go.kr/wk/a/b/1200/retriveDtlEmpSrchList.do?jobId=3",
     },
     {
       id: "jd-4",
@@ -57,7 +58,8 @@ function seedDb(): MockDb {
       matchScore: 63,
       source: "worknet",
       deadline: daysFromNow(20),
-      applyUrl: "https://www.work24.go.kr/wk/a/b/1200/retriveDtlEmpSrchList.do?jobId=4",
+      applyUrl:
+        "https://www.work24.go.kr/wk/a/b/1200/retriveDtlEmpSrchList.do?jobId=4",
     },
   ];
 
@@ -143,7 +145,10 @@ function seedDb(): MockDb {
     {
       id: "gap-branch-1-1",
       branchId: "branch-1",
-      gaps: ["pgvector 등 벡터 검색 실무 경험 명시 부족", "우대사항 관련 경험 전반 미기재"],
+      gaps: [
+        "pgvector 등 벡터 검색 실무 경험 명시 부족",
+        "우대사항 관련 경험 전반 미기재",
+      ],
       feedback:
         "원티드랩 공고는 pgvector 기반 유사도 검색 경험을 우대사항으로 명시하고 있습니다. 관련 프로젝트 경험이 있다면 구체적으로 추가해보세요.",
       generatedAt: daysAgo(4),
