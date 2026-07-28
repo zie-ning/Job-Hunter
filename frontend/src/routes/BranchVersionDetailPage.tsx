@@ -1,36 +1,38 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { mockResumeAdapter } from "../adapters/resumeAdapter";
+import { mockBranchAdapter } from "../adapters/branchAdapter";
 import type { ResumeVersion } from "../adapters/types";
 import { Card } from "../components/Card";
-import { Button } from "../components/Button";
 import { DiffView } from "../components/DiffView";
 
-export function ResumeVersionDetailPage() {
-  const { id } = useParams<{ id: string }>();
+export function BranchVersionDetailPage() {
+  const { branchId, versionId } = useParams<{
+    branchId: string;
+    versionId: string;
+  }>();
   const [current, setCurrent] = useState<ResumeVersion | null>(null);
   const [previous, setPrevious] = useState<ResumeVersion | null>(null);
 
   useEffect(() => {
-    if (!id) return;
+    if (!branchId || !versionId) return;
     void (async () => {
-      const all = await mockResumeAdapter.getVersions();
-      const index = all.findIndex((v) => v.id === id);
+      const branch = await mockBranchAdapter.getBranch(branchId);
+      const index = branch.versions.findIndex((v) => v.id === versionId);
       if (index === -1) return;
-      setCurrent(all[index]);
-      setPrevious(index > 0 ? all[index - 1] : null);
+      setCurrent(branch.versions[index]);
+      setPrevious(index > 0 ? branch.versions[index - 1] : null);
     })();
-  }, [id]);
+  }, [branchId, versionId]);
 
-  if (!current) {
+  if (!current || !branchId) {
     return <Card>불러오는 중...</Card>;
   }
 
   return (
     <div className="version-detail-page">
-      <Link to="/resumes">← 버전 목록으로</Link>
+      <Link to={`/branches/${branchId}`}>← 브랜치로 돌아가기</Link>
       <Card>
-        <h2>{current.comment || "(코멘트 없음)"}</h2>
+        <h2>{current.comment || "(커밋 메시지 없음)"}</h2>
         <p className="version-meta">
           {new Date(current.createdAt).toLocaleString("ko-KR")}
         </p>
@@ -40,11 +42,6 @@ export function ResumeVersionDetailPage() {
           <p>첫 번째 버전이라 비교할 이전 버전이 없습니다.</p>
         )}
       </Card>
-      <div className="version-detail-actions">
-        <Button variant="secondary" type="button" disabled>
-          이 버전으로 브랜치 생성 (JD 매칭 화면에서 가능)
-        </Button>
-      </div>
     </div>
   );
 }

@@ -1,18 +1,21 @@
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { Button } from "./Button";
+import logoUrl from "../assets/logo.svg";
 
 const NAV_ITEMS = [
-  { to: "/resumes", label: "이력서 관리" },
-  { to: "/matches", label: "JD 매칭" },
   { to: "/branches", label: "브랜치" },
+  { to: "/matches", label: "매칭 공고" },
+  { to: "/calendar", label: "공고 달력" },
 ];
 
 export function Header() {
   const { logout } = useAuth();
   return (
     <header className="app-header">
-      <span className="app-header-logo">채용지원 어시스턴트</span>
+      <NavLink to="/branches" className="app-header-logo">
+        <img src={logoUrl} alt="Job Hunter" className="app-header-logo-img" />
+      </NavLink>
       <nav className="app-header-nav">
         {NAV_ITEMS.map((item) => (
           <NavLink
