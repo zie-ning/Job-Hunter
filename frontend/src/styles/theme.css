@@ -1,0 +1,192 @@
+@import "tailwindcss";
+
+/* ==========================================================
+   런타임 색상 변수 — 라이트/다크 전환은 여기서만 일어난다.
+   Tailwind의 @theme 값은 빌드 타임에 고정되므로, prefers-color-scheme에
+   따라 값이 바뀌어야 하는 색상은 반드시 이 var() 간접 참조를 거친다.
+   (radius/font/shadow의 elevation 값도 동일한 이유로 아래에서 함께 정의)
+
+   docs/DESIGN.md §2 토큰 레퍼런스와 1:1 대응한다. 값을 바꿀 때는
+   두 문서를 함께 갱신한다.
+   ========================================================== */
+:root {
+  --bg: #fbfafd;
+  --surface: #ffffff;
+  --surface-sunken: #f4f2f9;
+
+  /* 배경 분위기 레이어(body::before, index.css) 전용 — D안 프리뷰의
+     "화면 밖에서 번져 들어오는" bloom. 카드/버튼 fill에는 쓰지 않는다 */
+  --bloom-1: rgb(139 124 246 / 16%);
+  --bloom-2: rgb(231 198 232 / 20%);
+
+  --text: #57536b;
+  --text-strong: #16132b;
+  --text-muted: #77738d; /* on 흰 카드 4.54:1 (WCAG AA) */
+
+  --border: #e7e5ee;
+  --border-strong: #d8d5e6;
+
+  --accent: #6b5ce7;
+  --accent-hover: #5a4bd4;
+  --accent-soft: rgb(107 92 231 / 9%);
+  --accent-on: #ffffff;
+
+  --positive: #0f7a5f;
+  --positive-soft: rgb(15 122 95 / 10%);
+  --warning: #9a5b06;
+  --warning-soft: rgb(154 91 6 / 10%);
+  --danger: #a32d2d;
+  --danger-soft: rgb(163 45 45 / 10%);
+  --neutral: #6f6b82;
+  --neutral-soft: rgb(111 107 130 / 8%);
+
+  /* elevation 사다리 — 테두리 대신 그림자로 계층을 표현한다 */
+  --e1: 0 1px 2px rgb(22 19 43 / 4%), 0 1px 3px rgb(22 19 43 / 3%);
+  --e2: 0 1px 2px rgb(22 19 43 / 4%), 0 8px 24px -10px rgb(22 19 43 / 14%);
+  --e3: 0 2px 4px rgb(22 19 43 / 5%), 0 16px 40px -12px rgb(22 19 43 / 20%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f0e17;
+    --surface: #181725;
+    --surface-sunken: #1e1d2c;
+
+    --bloom-1: rgb(139 124 246 / 20%);
+    --bloom-2: rgb(203 145 208 / 12%);
+
+    --text: #a09cb8;
+    --text-strong: #f2f0f9;
+    --text-muted: #8681a0; /* on surface 4.95:1 */
+
+    --border: #2a2839;
+    --border-strong: #363347;
+
+    --accent: #a99bff;
+    --accent-hover: #bcb1ff;
+    --accent-soft: rgb(169 155 255 / 14%);
+    --accent-on: #171622;
+
+    --positive: #4ecfa4;
+    --positive-soft: rgb(78 207 164 / 14%);
+    --warning: #f0bd6d;
+    --warning-soft: rgb(240 189 109 / 14%);
+    --danger: #f09595;
+    --danger-soft: rgb(240 149 149 / 14%);
+    --neutral: #9a96ad;
+    --neutral-soft: rgb(154 150 173 / 11%);
+
+    --e1: 0 1px 2px rgb(0 0 0 / 40%);
+    --e2: 0 1px 2px rgb(0 0 0 / 40%), 0 8px 24px -10px rgb(0 0 0 / 70%);
+    --e3: 0 2px 4px rgb(0 0 0 / 50%), 0 16px 40px -12px rgb(0 0 0 / 80%);
+  }
+}
+
+@theme {
+  /* 기본 팔레트·폰트·radius·shadow 스케일을 전부 지운다.
+     이렇게 하면 bg-indigo-600 같은 "AI 티" 클래스가 애초에
+     생성되지 않는다 — 아래에서 정의한 프로젝트 토큰만 존재한다. */
+  --color-*: initial;
+  --font-*: initial;
+  --radius-*: initial;
+  --shadow-*: initial;
+
+  /* === 색상 — 위 런타임 변수를 그대로 매핑한다 === */
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-sunken: var(--surface-sunken);
+
+  --color-text: var(--text);
+  --color-text-strong: var(--text-strong);
+  --color-text-muted: var(--text-muted);
+
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-on: var(--accent-on);
+
+  --color-positive: var(--positive);
+  --color-positive-soft: var(--positive-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-neutral: var(--neutral);
+  --color-neutral-soft: var(--neutral-soft);
+
+  /* === 폰트 === */
+  --font-sans: "Pretendard Variable", Pretendard, system-ui, sans-serif;
+  --font-display: "Plus Jakarta Sans", "Pretendard Variable", sans-serif;
+  /* 숫자 전용 모노스페이스 웹폰트(IBM Plex Mono 등)는 셀프호스팅하지 않는다 —
+     이번 스텝에서 다운로드 승인을 받은 것은 Pretendard·Plus Jakarta Sans
+     2개뿐이다. 대신 --font-sans에 tabular-nums를 적용해 숫자 정렬 효과를
+     낸다 (아래 .tabular-nums 유틸리티 참고). 시스템 모노는 순수 폴백용 */
+  --font-mono: ui-monospace, "SFMono-Regular", Consolas, monospace;
+
+  /* === 타입 스케일 — 16px 루트 기준 모듈러 스케일(약 1.125배).
+     기존 코드의 11~15px 5단계 무질서한 하드코딩을 대체한다.
+     실제 화면 구현 시 임의의 px 대신 이 스케일 중 가장 가까운
+     단계에 맞춘다 (docs/DESIGN.md 금지 규칙 참고). === */
+  --text-2xs: 0.6875rem; /* 11px — 마이크로 라벨, 태그 */
+  --text-2xs--line-height: 1.4;
+  --text-xs: 0.75rem; /* 12px — 메타 텍스트, 배지 */
+  --text-xs--line-height: 1.45;
+  --text-sm: 0.8125rem; /* 13px — 버튼, 인풋, 보조 텍스트 */
+  --text-sm--line-height: 1.5;
+  --text-base: 0.9375rem; /* 15px — 본문 기본값 */
+  --text-base--line-height: 1.6;
+  --text-md: 1rem; /* 16px — 내비게이션, 강조 */
+  --text-md--line-height: 1.55;
+  --text-lg: 1.125rem; /* 18px — 카드 타이틀(회사명 등) */
+  --text-lg--line-height: 1.4;
+  --text-xl: 1.3125rem; /* 21px — 섹션 제목 */
+  --text-xl--line-height: 1.3;
+  --text-2xl: 1.5625rem; /* 25px — 큰 제목 */
+  --text-2xl--line-height: 1.25;
+  --text-3xl: 2rem; /* 32px — 히어로급, 드물게 사용 */
+  --text-3xl--line-height: 1.15;
+
+  /* === Radius — C안 구조(각진 사각형)를 따라 pill 대신 3단계 === */
+  --radius-sm: 7px; /* 버튼, 인풋, 필터, 태그 */
+  --radius-md: 11px; /* 범용 브랜치 카드 */
+  --radius-lg: 15px; /* 공고 브랜치 카드 */
+  --radius-full: 9999px; /* 원형 요소(게이지, 아바타) 전용 — pill 버튼에는 쓰지 않는다 */
+
+  /* === Shadow — elevation 사다리. 다크/라이트 값은 위 런타임 변수가 전환한다 === */
+  --shadow-e1: var(--e1);
+  --shadow-e2: var(--e2);
+  --shadow-e3: var(--e3);
+
+  /* === 모션 === */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Modal 전용 진입 애니메이션. 나머지 모션(리스트 stagger, 카드 hover
+     lift, 스켈레톤 shimmer 등)은 Step 7에서 앱 전역에 추가한다 */
+  --animate-fade-in: fade-in 0.15s ease-out both;
+  --animate-fade-scale: fade-scale 0.18s var(--ease-out-expo) both;
+
+  /* === 컨테이너 폭 — Vite 템플릿 잔재(#root width:1126px)를 대체 === */
+  --container-auth: 26rem; /* 416px — 로그인/회원가입 */
+  --container-app: 60rem; /* 960px — 일반 페이지 본문 */
+  /* 1152px. 공고 브랜치 상세(JD 레이아웃)의 목표 폭이지만, 현재 그 화면은
+     .app-main의 폭 제약을 벗어나기 위해 뷰포트 기준 풀블리드 기법을 쓰고
+     있어 이 토큰을 아직 직접 참조하지 않는다 (components.css의
+     .branch-detail-jd-layout 주석 참고 — max-width로 상한을 씌우면
+     CSS 과제약 규칙 때문에 초광폭 화면에서 중앙 정렬이 깨진다).
+     Step 6에서 페이지 구조를 다시 설계할 때 실제로 연결한다. */
+  --container-wide: 72rem;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes fade-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(4px);
+  }
+}
