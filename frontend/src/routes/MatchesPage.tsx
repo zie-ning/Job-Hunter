@@ -2,20 +2,27 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { mockMatchAdapter } from "../adapters/matchAdapter";
 import { mockBranchAdapter } from "../adapters/branchAdapter";
-import type { JdMatch } from "../adapters/types";
+import type { Branch, JdMatch } from "../adapters/types";
 import { Card } from "../components/Card";
 import { Badge } from "../components/Badge";
 import { Button } from "../components/Button";
 import { EmptyState } from "../components/EmptyState";
-import { BaseVersionModal } from "../components/BaseVersionModal";
+import { ForkPickerModal } from "../components/ForkPickerModal";
 
 export function MatchesPage() {
   const navigate = useNavigate();
   const [matches, setMatches] = useState<JdMatch[] | null>(null);
+  const [branches, setBranches] = useState<Branch[]>([]);
   const [modalJdMatchId, setModalJdMatchId] = useState<string | null>(null);
 
   useEffect(() => {
-    void mockMatchAdapter.getMatches().then(setMatches);
+    void Promise.all([
+      mockMatchAdapter.getMatches(),
+      mockBranchAdapter.getBranches(),
+    ]).then(([matchList, branchList]) => {
+      setMatches(matchList);
+      setBranches(branchList);
+    });
   }, []);
 
   async function handlePrepareApply(jdMatchId: string) {
@@ -27,11 +34,11 @@ export function MatchesPage() {
     setModalJdMatchId(jdMatchId);
   }
 
-  async function handleSelectBaseVersion(versionId: string) {
+  async function handleConfirmFork(initialContent: string) {
     if (!modalJdMatchId) return;
-    const branch = await mockBranchAdapter.createBranch(
+    const branch = await mockBranchAdapter.createJdBranch(
       modalJdMatchId,
-      versionId,
+      initialContent,
     );
     setModalJdMatchId(null);
     navigate(`/branches/${branch.id}`);
@@ -74,8 +81,10 @@ export function MatchesPage() {
         </Card>
       ))}
       {modalJdMatchId && (
-        <BaseVersionModal
-          onSelect={handleSelectBaseVersion}
+        <ForkPickerModal
+          branches={branches}
+          matches={matches}
+          onConfirm={handleConfirmFork}
           onClose={() => setModalJdMatchId(null)}
         />
       )}
