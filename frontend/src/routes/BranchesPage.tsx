@@ -19,6 +19,9 @@ import { Select } from "../components/Select";
 import { EmptyState } from "../components/EmptyState";
 import { NewBranchModal } from "../components/NewBranchModal";
 import { NewJdBranchModal } from "../components/NewJdBranchModal";
+import { Skeleton } from "../components/Skeleton";
+import { ScoreGauge } from "../components/ScoreGauge";
+import { StarIcon } from "../components/icons";
 
 const STATUS_FILTERS: Array<BranchStatus | "all"> = [
   "all",
@@ -40,6 +43,33 @@ function lastModifiedAt(branch: Branch): string {
 
 function lastModified(branch: Branch): string {
   return formatDate(lastModifiedAt(branch));
+}
+
+/**
+ * 섹션 제목. div + role="heading"을 쓴다 — <h2>/<h3> 태그는 index.css의
+ * 레거시 블랭킷 규칙과 충돌한다(docs/DESIGN.md §4 "알려진 한계" 참고).
+ */
+function SectionHeading({
+  children,
+  count,
+}: {
+  children: React.ReactNode;
+  count: number;
+}) {
+  return (
+    <div className="flex items-center gap-2.5">
+      <div
+        role="heading"
+        aria-level={2}
+        className="text-text-strong font-sans text-lg font-bold"
+      >
+        {children}
+      </div>
+      <span className="bg-neutral-soft text-text rounded-sm px-1.5 py-0.5 font-mono text-xs">
+        {count}
+      </span>
+    </div>
+  );
 }
 
 export function BranchesPage() {
@@ -137,14 +167,27 @@ export function BranchesPage() {
   }
 
   if (branches === null) {
-    return <Card>불러오는 중...</Card>;
+    return (
+      <div className="flex flex-col gap-3">
+        <Card className="flex flex-col gap-3">
+          <Skeleton className="h-4 w-1/4" />
+          <Skeleton className="h-16 w-full" />
+        </Card>
+        <Card className="flex flex-col gap-3">
+          <Skeleton className="h-4 w-1/4" />
+          <Skeleton className="h-24 w-full" />
+        </Card>
+      </div>
+    );
   }
 
   return (
-    <div className="branches-page">
-      <div className="branch-section">
-        <div className="branch-section-header">
-          <h3>범용 브랜치</h3>
+    <div className="flex flex-col gap-12">
+      <section className="flex flex-col gap-4">
+        <div className="flex items-center justify-between">
+          <SectionHeading count={orderedGeneralBranches.length}>
+            범용 브랜치
+          </SectionHeading>
           <Button
             type="button"
             variant="secondary"
@@ -155,33 +198,45 @@ export function BranchesPage() {
         </div>
 
         {orderedGeneralBranches.length === 0 ? (
-          <p className="branch-section-empty">
+          <p className="text-text text-sm">
             아직 범용 브랜치가 없습니다. "새 브랜치 만들기"로 마스터 이력서를
             만들어보세요.
           </p>
         ) : (
-          <div className="branch-general-strip">
+          <div className="flex gap-2.5 overflow-x-auto pb-1">
             {orderedGeneralBranches.map((branch) => (
               <Link
                 key={branch.id}
                 to={`/branches/${branch.id}`}
-                className={
-                  branch.isDefault ? "branch-chip default" : "branch-chip"
-                }
+                className={[
+                  "bg-surface shadow-e1 hover:shadow-e2 min-w-60 shrink-0 rounded-md p-4 transition-shadow",
+                  branch.isDefault
+                    ? "ring-accent ring-2"
+                    : "ring-border ring-1",
+                ].join(" ")}
               >
-                <span className="branch-chip-name">{branch.name}</span>
-                <span className="branch-chip-meta">
+                <div className="flex items-center gap-1.5">
+                  {branch.isDefault && (
+                    <StarIcon className="text-accent shrink-0" />
+                  )}
+                  <span className="text-text-strong font-sans truncate text-sm font-semibold">
+                    {branch.name}
+                  </span>
+                </div>
+                <span className="text-text-muted mt-0.5 block font-mono text-xs">
                   최근 수정 {lastModified(branch)}
                 </span>
               </Link>
             ))}
           </div>
         )}
-      </div>
+      </section>
 
-      <div className="branch-section">
-        <div className="branch-section-header">
-          <h3>공고 브랜치</h3>
+      <section className="flex flex-col gap-4">
+        <div className="flex items-center justify-between">
+          <SectionHeading count={jdBranchesWithMatch.length}>
+            공고 브랜치
+          </SectionHeading>
           <Button
             type="button"
             variant="secondary"
@@ -190,32 +245,36 @@ export function BranchesPage() {
             + 새 브랜치 만들기
           </Button>
         </div>
-        <div className="branch-toolbar">
+
+        <div className="flex flex-wrap items-end gap-2.5">
           <TextField
             label="검색"
             placeholder="회사명 또는 기술스택으로 검색"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
+            className="min-w-56 flex-1"
           />
           <Select
             label="정렬"
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as SortOption)}
+            className="min-w-36"
           >
             <option value="recent">최근 수정순</option>
             <option value="deadline">마감일 순</option>
           </Select>
-          <div className="branch-filter">
+          <div className="border-border bg-surface flex gap-0.5 rounded-sm border p-0.5">
             {STATUS_FILTERS.map((status) => (
               <button
                 key={status}
                 type="button"
-                className={
-                  filter === status
-                    ? "branch-filter-btn active"
-                    : "branch-filter-btn"
-                }
                 onClick={() => setFilter(status)}
+                className={[
+                  "rounded-sm px-3 py-1.5 text-sm font-medium transition-colors",
+                  filter === status
+                    ? "bg-surface-sunken text-text-strong shadow-e1 font-semibold"
+                    : "text-text hover:bg-surface-sunken hover:text-text-strong",
+                ].join(" ")}
               >
                 {status === "all" ? "전체" : BRANCH_STATUS_LABEL[status]}
               </button>
@@ -234,45 +293,60 @@ export function BranchesPage() {
             description="필터나 검색어를 조정해보세요."
           />
         ) : (
-          <div className="branch-list">
+          <div className="flex flex-col gap-2.5">
             {filteredJdBranches.map(({ branch, match }) => (
-              <Link
-                key={branch.id}
-                to={`/branches/${branch.id}`}
-                className="branch-card-link"
-              >
-                <Card className="branch-card">
-                  <div className="match-card-header">
-                    <div>
-                      <h3>{match?.company ?? "알 수 없는 공고"}</h3>
-                      <p className="match-title">{match?.title}</p>
+              <Link key={branch.id} to={`/branches/${branch.id}`}>
+                <Card
+                  elevation="flat"
+                  className="hover:shadow-e2 flex items-center gap-5 transition-shadow"
+                >
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-2.5">
+                      <span className="text-text-strong font-sans text-base font-bold">
+                        {match?.company ?? "알 수 없는 공고"}
+                      </span>
+                      <span className="bg-border h-3 w-px" />
+                      <span className="text-text text-sm">{match?.title}</span>
+                      <Badge tone={BRANCH_STATUS_TONE[branch.status]}>
+                        {BRANCH_STATUS_LABEL[branch.status]}
+                      </Badge>
                     </div>
-                    <Badge tone={BRANCH_STATUS_TONE[branch.status]}>
-                      {BRANCH_STATUS_LABEL[branch.status]}
-                    </Badge>
-                  </div>
-                  {match && match.skills.length > 0 && (
-                    <div className="match-skills">
-                      {match.skills.map((skill) => (
-                        <Badge key={skill} tone="neutral">
-                          {skill}
-                        </Badge>
-                      ))}
-                    </div>
-                  )}
-                  <div className="branch-card-meta">
-                    {match && (
-                      <span className="match-score">{match.matchScore}점</span>
+                    {match && match.skills.length > 0 && (
+                      <div className="mt-2.5 flex flex-wrap gap-1.5">
+                        {match.skills.map((skill) => (
+                          <span
+                            key={skill}
+                            className="border-border bg-surface-sunken text-text rounded-sm border px-2 py-0.5 font-mono text-xs"
+                          >
+                            {skill}
+                          </span>
+                        ))}
+                      </div>
                     )}
-                    <span>최근 수정 {lastModified(branch)}</span>
-                    {match && <span>마감 {formatDate(match.deadline)}</span>}
+                    <div className="text-text-muted mt-2.5 flex gap-4 text-xs">
+                      <span>
+                        최근 수정{" "}
+                        <span className="font-mono">
+                          {lastModified(branch)}
+                        </span>
+                      </span>
+                      {match && (
+                        <span>
+                          마감{" "}
+                          <span className="text-warning font-mono font-semibold">
+                            {formatDate(match.deadline)}
+                          </span>
+                        </span>
+                      )}
+                    </div>
                   </div>
+                  {match && <ScoreGauge score={match.matchScore} />}
                 </Card>
               </Link>
             ))}
           </div>
         )}
-      </div>
+      </section>
 
       {isCreatingGeneral && (
         <NewBranchModal

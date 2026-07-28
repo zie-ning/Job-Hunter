@@ -18,9 +18,90 @@ import { ScoreDelta } from "../components/ScoreDelta";
 import { GapAnalysisSection } from "../components/GapAnalysisSection";
 import { FeedbackHistoryPanel } from "../components/FeedbackHistoryPanel";
 import { BranchSettingsMenu } from "../components/BranchSettingsMenu";
+import { Skeleton } from "../components/Skeleton";
 
 const PLACEHOLDER_PARSED_TEXT =
   "업로드한 파일에서 파싱된 이력서 내용입니다.\n\n실제 PDF 텍스트 추출은 Phase 4에서 구현됩니다.";
+
+/** div + role="heading" — <h2>/<h3> 태그는 index.css의 레거시 블랭킷
+ * 규칙과 충돌한다(docs/DESIGN.md §4 "알려진 한계" 참고) */
+function Heading({
+  level,
+  className,
+  children,
+}: {
+  level: 2 | 3;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      role="heading"
+      aria-level={level}
+      className={["text-text-strong font-sans font-bold", className]
+        .filter(Boolean)
+        .join(" ")}
+    >
+      {children}
+    </div>
+  );
+}
+
+function ReuploadLink({
+  onUpload,
+}: {
+  onUpload: (event: ChangeEvent<HTMLInputElement>) => void;
+}) {
+  return (
+    <label className="text-accent hover:text-accent-hover cursor-pointer text-sm font-medium">
+      새 파일 업로드
+      <input
+        type="file"
+        accept=".pdf,.doc,.docx"
+        onChange={onUpload}
+        hidden
+      />
+    </label>
+  );
+}
+
+function VersionList({
+  branch,
+  match,
+}: {
+  branch: Branch;
+  match: JdMatch | null;
+}) {
+  return (
+    <ul className="mt-3 flex flex-col gap-2">
+      {[...branch.versions].reverse().map((version) => {
+        const index = branch.versions.findIndex((v) => v.id === version.id);
+        const baseScore = match?.matchScore ?? 0;
+        const before = index === 0 ? baseScore : baseScore + index * 2 - 2;
+        const after = baseScore + index * 2;
+        return (
+          <li
+            key={version.id}
+            className="border-border flex items-center justify-between gap-3 rounded-sm border px-3 py-2.5"
+          >
+            <Link
+              to={`/branches/${branch.id}/versions/${version.id}`}
+              className="text-text-strong hover:text-accent flex min-w-0 flex-1 flex-col gap-0.5"
+            >
+              <span className="truncate text-sm">
+                {version.comment || "(커밋 메시지 없음)"}
+              </span>
+              <span className="text-text-muted font-mono text-xs">
+                {new Date(version.createdAt).toLocaleString("ko-KR")}
+              </span>
+            </Link>
+            {match && <ScoreDelta before={before} after={after} />}
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
 
 export function BranchDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -114,7 +195,13 @@ export function BranchDetailPage() {
   }
 
   if (!branch) {
-    return <Card>불러오는 중...</Card>;
+    return (
+      <Card className="flex flex-col gap-3">
+        <Skeleton className="h-6 w-1/3" />
+        <Skeleton className="h-4 w-1/4" />
+        <Skeleton className="h-32 w-full" />
+      </Card>
+    );
   }
 
   if (branch.kind === "jd") {
@@ -127,10 +214,12 @@ export function BranchDetailPage() {
         />
 
         <div className="branch-main">
-          <Card className="branch-meta-header">
-            <div className="branch-meta-header-top">
+          <Card>
+            <div className="mb-4 flex items-start justify-between gap-3">
               <div>
-                <h2>{match?.company ?? "알 수 없는 공고"}</h2>
+                <Heading level={2} className="mb-1.5 text-lg">
+                  {match?.company ?? "알 수 없는 공고"}
+                </Heading>
                 <Badge tone={BRANCH_STATUS_TONE[branch.status]}>
                   {BRANCH_STATUS_LABEL[branch.status]}
                 </Badge>
@@ -140,14 +229,20 @@ export function BranchDetailPage() {
                 onChangeStatus={handleChangeStatus}
               />
             </div>
+            {/* branch-meta-fields는 84px/1fr 2열 grid 구조만 담당하는
+                CSS 훅이다 — 대괄호 임의값(grid-cols-[84px_1fr]) 대신
+                재사용되지 않는 이 한 번뿐인 레이아웃은 작은 구조적
+                클래스로 유지한다(docs/DESIGN.md §5 금지 규칙) */}
             <dl className="branch-meta-fields">
-              <div className="branch-meta-row">
-                <dt>직무</dt>
-                <dd>{match?.title ?? "-"}</dd>
+              <div className="contents">
+                <dt className="text-text text-sm">직무</dt>
+                <dd className="text-text-strong m-0 flex flex-wrap items-center gap-1.5 text-sm">
+                  {match?.title ?? "-"}
+                </dd>
               </div>
-              <div className="branch-meta-row">
-                <dt>기술 스택</dt>
-                <dd className="match-skills">
+              <div className="contents">
+                <dt className="text-text text-sm">기술 스택</dt>
+                <dd className="text-text-strong m-0 flex flex-wrap items-center gap-1.5 text-sm">
                   {match && match.skills.length > 0
                     ? match.skills.map((skill) => (
                         <Badge key={skill} tone="neutral">
@@ -157,11 +252,16 @@ export function BranchDetailPage() {
                     : "-"}
                 </dd>
               </div>
-              <div className="branch-meta-row">
-                <dt>공고 링크</dt>
-                <dd>
+              <div className="contents">
+                <dt className="text-text text-sm">공고 링크</dt>
+                <dd className="text-text-strong m-0 flex flex-wrap items-center gap-1.5 text-sm">
                   {match?.applyUrl ? (
-                    <a href={match.applyUrl} target="_blank" rel="noreferrer">
+                    <a
+                      href={match.applyUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-accent hover:text-accent-hover"
+                    >
                       공고 보기 ↗
                     </a>
                   ) : (
@@ -169,17 +269,17 @@ export function BranchDetailPage() {
                   )}
                 </dd>
               </div>
-              <div className="branch-meta-row">
-                <dt>마감일</dt>
-                <dd>
+              <div className="contents">
+                <dt className="text-text text-sm">마감일</dt>
+                <dd className="text-text-strong m-0 flex flex-wrap items-center gap-1.5 text-sm">
                   {match
                     ? new Date(match.deadline).toLocaleDateString("ko-KR")
                     : "-"}
                 </dd>
               </div>
-              <div className="branch-meta-row">
-                <dt>매칭점수</dt>
-                <dd className="match-score">
+              <div className="contents">
+                <dt className="text-text text-sm">매칭점수</dt>
+                <dd className="text-accent m-0 flex flex-wrap items-center gap-1.5 font-mono text-sm font-bold">
                   {match ? `${match.matchScore}점` : "-"}
                 </dd>
               </div>
@@ -187,19 +287,13 @@ export function BranchDetailPage() {
           </Card>
 
           <Card>
-            <div className="branch-editor-header">
-              <h3>이력서 편집</h3>
-              <label className="branch-reupload">
-                새 파일 업로드
-                <input
-                  type="file"
-                  accept=".pdf,.doc,.docx"
-                  onChange={handleUpload}
-                  hidden
-                />
-              </label>
+            <div className="flex items-center justify-between">
+              <Heading level={3} className="text-base">
+                이력서 편집
+              </Heading>
+              <ReuploadLink onUpload={handleUpload} />
             </div>
-            <form onSubmit={handleSave} className="branch-editor-form">
+            <form onSubmit={handleSave} className="mt-4 flex flex-col gap-4">
               <Textarea
                 label="이력서 내용"
                 value={content}
@@ -211,39 +305,17 @@ export function BranchDetailPage() {
                 onChange={(e) => setComment(e.target.value)}
                 placeholder="이번에 무엇을 바꿨는지 짧게 남겨보세요"
               />
-              <Button type="submit" isLoading={isSaving}>
+              <Button type="submit" isLoading={isSaving} className="self-start">
                 저장하고 새 버전 만들기
               </Button>
             </form>
           </Card>
 
           <Card>
-            <h3>버전 이력 (커밋 로그)</h3>
-            <ul className="branch-version-list">
-              {[...branch.versions].reverse().map((version) => {
-                const index = branch.versions.findIndex(
-                  (v) => v.id === version.id,
-                );
-                const baseScore = match?.matchScore ?? 0;
-                const before =
-                  index === 0 ? baseScore : baseScore + index * 2 - 2;
-                const after = baseScore + index * 2;
-                return (
-                  <li key={version.id} className="branch-version-item">
-                    <Link
-                      to={`/branches/${branch.id}/versions/${version.id}`}
-                      className="branch-version-link"
-                    >
-                      <span>{version.comment || "(커밋 메시지 없음)"}</span>
-                      <span className="version-meta">
-                        {new Date(version.createdAt).toLocaleString("ko-KR")}
-                      </span>
-                    </Link>
-                    {match && <ScoreDelta before={before} after={after} />}
-                  </li>
-                );
-              })}
-            </ul>
+            <Heading level={3} className="text-base">
+              버전 이력 (커밋 로그)
+            </Heading>
+            <VersionList branch={branch} match={match} />
           </Card>
         </div>
       </div>
@@ -251,14 +323,16 @@ export function BranchDetailPage() {
   }
 
   return (
-    <div className="branch-detail-page">
+    <div className="flex flex-col gap-4">
       <Card>
-        <div className="branch-detail-header">
+        <div className="mb-4 flex items-start justify-between">
           <div>
-            <h2>{branch.name}</h2>
-            <p className="match-title">범용 브랜치</p>
+            <Heading level={2} className="mb-1 text-lg">
+              {branch.name}
+            </Heading>
+            <p className="text-text text-sm">범용 브랜치</p>
           </div>
-          <div className="branch-detail-badges">
+          <div className="flex items-center gap-2">
             {branch.isDefault && <Badge tone="neutral">기본</Badge>}
             <Badge tone={BRANCH_STATUS_TONE[branch.status]}>
               {BRANCH_STATUS_LABEL[branch.status]}
@@ -276,19 +350,13 @@ export function BranchDetailPage() {
       </Card>
 
       <Card>
-        <div className="branch-editor-header">
-          <h3>이력서 편집</h3>
-          <label className="branch-reupload">
-            새 파일 업로드
-            <input
-              type="file"
-              accept=".pdf,.doc,.docx"
-              onChange={handleUpload}
-              hidden
-            />
-          </label>
+        <div className="flex items-center justify-between">
+          <Heading level={3} className="text-base">
+            이력서 편집
+          </Heading>
+          <ReuploadLink onUpload={handleUpload} />
         </div>
-        <form onSubmit={handleSave} className="branch-editor-form">
+        <form onSubmit={handleSave} className="mt-4 flex flex-col gap-4">
           <Textarea
             label="이력서 내용"
             value={content}
@@ -300,29 +368,17 @@ export function BranchDetailPage() {
             onChange={(e) => setComment(e.target.value)}
             placeholder="이번에 무엇을 바꿨는지 짧게 남겨보세요"
           />
-          <Button type="submit" isLoading={isSaving}>
+          <Button type="submit" isLoading={isSaving} className="self-start">
             저장하고 새 버전 만들기
           </Button>
         </form>
       </Card>
 
       <Card>
-        <h3>버전 이력 (커밋 로그)</h3>
-        <ul className="branch-version-list">
-          {[...branch.versions].reverse().map((version) => (
-            <li key={version.id} className="branch-version-item">
-              <Link
-                to={`/branches/${branch.id}/versions/${version.id}`}
-                className="branch-version-link"
-              >
-                <span>{version.comment || "(커밋 메시지 없음)"}</span>
-                <span className="version-meta">
-                  {new Date(version.createdAt).toLocaleString("ko-KR")}
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <Heading level={3} className="text-base">
+          버전 이력 (커밋 로그)
+        </Heading>
+        <VersionList branch={branch} match={null} />
 
         {gapHistory !== undefined && (
           <GapAnalysisSection
