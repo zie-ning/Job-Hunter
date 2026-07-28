@@ -1,0 +1,27 @@
+/* ==========================================================
+   셀프호스팅 웹폰트.
+
+   외부 CDN(Google Fonts 등)에 런타임 의존하지 않도록 두 파일을
+   frontend/public/fonts/에 직접 받아 배포한다. 출처와 라이선스:
+     - PretendardVariable.woff2 — Pretendard(SIL OFL 1.1),
+       https://github.com/orioncactus/pretendard
+     - PlusJakartaSans-Bold.woff2 — Plus Jakarta Sans(OFL),
+       Google Fonts, latin subset, weight 700(요청한 700/800이
+       동일 정적 파일로 귀결되어 700 하나만 사용한다)
+   ========================================================== */
+
+@font-face {
+  font-family: "Pretendard Variable";
+  font-weight: 45 920; /* 가변폭 전체 굵기 범위 — 공식 배포 CSS와 동일 */
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/PretendardVariable.woff2") format("woff2-variations");
+}
+
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  font-weight: 700 800; /* 두 굵기 요청이 동일 파일로 귀결됨 — §DESIGN.md 참고 */
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/PlusJakartaSans-Bold.woff2") format("woff2");
+}
