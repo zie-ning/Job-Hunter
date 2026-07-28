@@ -8,6 +8,7 @@ import { Badge } from "../components/Badge";
 import { Button } from "../components/Button";
 import { EmptyState } from "../components/EmptyState";
 import { ForkPickerModal } from "../components/ForkPickerModal";
+import { Skeleton } from "../components/Skeleton";
 
 export function MatchesPage() {
   const navigate = useNavigate();
@@ -45,7 +46,17 @@ export function MatchesPage() {
   }
 
   if (matches === null) {
-    return <Card>불러오는 중...</Card>;
+    return (
+      <div className="match-grid">
+        {[0, 1, 2].map((i) => (
+          <Card key={i} className="flex flex-col gap-3">
+            <Skeleton className="h-5 w-2/3" />
+            <Skeleton className="h-4 w-1/3" />
+            <Skeleton className="h-8 w-full" />
+          </Card>
+        ))}
+      </div>
+    );
   }
 
   if (matches.length === 0) {

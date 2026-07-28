@@ -26,28 +26,46 @@ export function GapAnalysisSection({
   }
 
   return (
-    <div className="gap-analysis">
-      <div className="gap-analysis-header">
-        <h3>갭분석 · 첨삭 피드백</h3>
+    <div className="border-border mt-6 border-t pt-5">
+      <div className="flex items-center justify-between">
+        <div
+          role="heading"
+          aria-level={3}
+          className="text-text-strong font-sans text-base font-bold"
+        >
+          갭분석 · 첨삭 피드백
+        </div>
         <Button type="button" onClick={handleRequest} isLoading={isLoading}>
           {result ? "다시 첨삭받기" : "첨삭하기/피드백 받기"}
         </Button>
       </div>
       {result && (
-        <div className="gap-analysis-result">
+        <div className="mt-4 flex flex-col gap-4">
           <div>
-            <h4>부족한 부분</h4>
-            <ul>
+            <div
+              role="heading"
+              aria-level={4}
+              className="text-text-strong font-sans mb-1.5 text-sm font-semibold"
+            >
+              부족한 부분
+            </div>
+            <ul className="text-text list-disc space-y-1 pl-5 text-sm">
               {result.gaps.map((gap) => (
                 <li key={gap}>{gap}</li>
               ))}
             </ul>
           </div>
           <div>
-            <h4>첨삭 피드백</h4>
-            <p>{result.feedback}</p>
+            <div
+              role="heading"
+              aria-level={4}
+              className="text-text-strong font-sans mb-1.5 text-sm font-semibold"
+            >
+              첨삭 피드백
+            </div>
+            <p className="text-text text-sm">{result.feedback}</p>
           </div>
-          <p className="gap-analysis-meta">
+          <p className="text-text-muted font-mono text-xs">
             {new Date(result.generatedAt).toLocaleString("ko-KR")} 기준
           </p>
         </div>

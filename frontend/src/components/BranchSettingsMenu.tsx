@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { BranchStatus } from "../adapters/types";
 import { BRANCH_STATUS_LABEL } from "../lib/branchStatus";
+import { GearIcon } from "./icons";
 
 const STATUS_OPTIONS: BranchStatus[] = [
   "undecided",
@@ -8,23 +9,6 @@ const STATUS_OPTIONS: BranchStatus[] = [
   "applied",
   "closed",
 ];
-
-function GearIcon() {
-  return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      aria-hidden="true"
-    >
-      <circle cx="12" cy="12" r="7.5" strokeDasharray="2.2 3.4" />
-      <circle cx="12" cy="12" r="2.75" />
-    </svg>
-  );
-}
 
 interface BranchSettingsMenuProps {
   status: BranchStatus;
@@ -50,18 +34,23 @@ export function BranchSettingsMenu({
   }, [open]);
 
   return (
-    <div className="branch-settings" ref={rootRef}>
+    <div className="relative" ref={rootRef}>
       <button
         type="button"
-        className="branch-settings-trigger"
         aria-label="브랜치 설정"
         onClick={() => setOpen((v) => !v)}
+        className="border-border text-text hover:border-accent hover:text-text-strong flex h-8 w-8 items-center justify-center rounded-sm border transition-colors"
       >
         <GearIcon />
       </button>
       {open && (
-        <div className="branch-settings-popover">
-          <label htmlFor="branch-status-select">진행 상태</label>
+        <div className="bg-surface shadow-e2 ring-border absolute top-9 right-0 z-10 flex w-45 flex-col gap-1.5 rounded-md p-3 ring-1">
+          <label
+            htmlFor="branch-status-select"
+            className="text-text text-xs font-medium"
+          >
+            진행 상태
+          </label>
           <select
             id="branch-status-select"
             value={status}
@@ -69,6 +58,7 @@ export function BranchSettingsMenu({
               onChangeStatus(e.target.value as BranchStatus);
               setOpen(false);
             }}
+            className="border-border bg-bg text-text-strong rounded-sm border px-2.5 py-2 text-sm"
           >
             {STATUS_OPTIONS.map((option) => (
               <option key={option} value={option}>

@@ -4,6 +4,7 @@ import { mockBranchAdapter } from "../adapters/branchAdapter";
 import type { ResumeVersion } from "../adapters/types";
 import { Card } from "../components/Card";
 import { DiffView } from "../components/DiffView";
+import { Skeleton } from "../components/Skeleton";
 
 export function BranchVersionDetailPage() {
   const { branchId, versionId } = useParams<{
@@ -25,7 +26,12 @@ export function BranchVersionDetailPage() {
   }, [branchId, versionId]);
 
   if (!current || !branchId) {
-    return <Card>불러오는 중...</Card>;
+    return (
+      <Card className="flex flex-col gap-3">
+        <Skeleton className="h-5 w-1/3" />
+        <Skeleton className="h-40 w-full" />
+      </Card>
+    );
   }
 
   return (

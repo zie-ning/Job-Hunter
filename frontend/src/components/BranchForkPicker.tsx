@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { Branch, JdMatch } from "../adapters/types";
 import { Button } from "./Button";
+import { ChevronDownIcon } from "./icons";
 
 export type ForkChoice =
   { type: "fresh" } | { type: "branch"; branchId: string };
@@ -24,25 +25,6 @@ function branchLabel(branch: Branch, matches: JdMatch[]): string {
   if (branch.kind === "general") return branch.name;
   const match = matches.find((m) => m.id === branch.jdMatchId);
   return match ? `${match.company} · ${match.title}` : "알 수 없는 공고";
-}
-
-function ChevronIcon({ open }: { open: boolean }) {
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-      className={open ? "fork-picker-chevron open" : "fork-picker-chevron"}
-    >
-      <path d="M6 9l6 6 6-6" />
-    </svg>
-  );
 }
 
 interface BranchForkPickerProps {
@@ -84,7 +66,9 @@ export function BranchForkPicker({
         onClick={() => setOpen((v) => !v)}
       >
         <span>{selectedLabel}</span>
-        <ChevronIcon open={open} />
+        <ChevronDownIcon
+          className={open ? "fork-picker-chevron open" : "fork-picker-chevron"}
+        />
       </button>
 
       {open && (
