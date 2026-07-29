@@ -1,0 +1,10 @@
+# 텍스트 파일은 항상 LF로 저장·체크아웃한다. Windows에서 core.autocrlf=true가
+# 체크아웃 시 LF를 CRLF로 바꿔놓으면, git에 저장된 실제 blob은 LF인데도
+# 로컬의 `npm run format:check`(prettier)가 CRLF를 근거로 오탐하는 문제가
+# 있었다 — 개발자의 로컬 git config에 의존하지 않도록 저장소 차원에서
+# 줄바꿈을 고정한다.
+* text=auto eol=lf
+
+# 폰트 파일은 바이너리다 — 텍스트 정규화 대상에서 명시적으로 제외해
+# 줄바꿈 변환으로 인한 손상을 방지한다.
+*.woff2 binary
