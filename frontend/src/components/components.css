@@ -1,0 +1,367 @@
+/* Skeleton.tsx 전용 shimmer 그라디언트 — 배경이 3단 그라디언트를 좌우로
+   스치는 효과라 Tailwind 유틸리티만으로 표현할 수 없다(대괄호 임의값
+   금지 규칙, docs/DESIGN.md §5). animate-shimmer(theme.css)가 이동을
+   담당하고, 이 클래스는 그라디언트 정의만 담당한다. */
+.skeleton-shimmer-bg {
+  background-image: linear-gradient(
+    90deg,
+    var(--surface-sunken) 25%,
+    var(--border) 50%,
+    var(--surface-sunken) 75%
+  );
+  background-size: 200% 100%;
+}
+
+/* .field 자체는 이제 스타일이 없는 구조적 훅이다 — Field.tsx가
+   flex/flex-col/gap을 Tailwind 유틸리티로 직접 적용한다. label/input/
+   select/textarea 스타일도 TextField.tsx/Textarea.tsx/Select.tsx가
+   FIELD_INPUT_CLASSES로 직접 적용한다. NewJdBranchModal이 아직 Tailwind로
+   옮기지 않아, 아래 .jd-import-row .field 훅만 계속 이 클래스명을 쓴다. */
+
+/* 375px 등 좁은 화면에서 로고/nav/로그아웃이 한 줄을 두고 다투다가
+   글자 단위로 줄바꿈되는 문제가 있었다 — 로고·nav 링크는 nowrap으로
+   줄바꿈을 막고, nav 자체는 넘치면 가로 스크롤되게 한다 */
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.app-header-logo {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex-shrink: 0;
+  color: var(--accent);
+}
+.app-header-logo-symbol {
+  display: block;
+  flex: 0 0 auto;
+}
+.app-header-logo-word {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+  color: var(--text-h);
+}
+.app-header-nav {
+  display: flex;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+}
+.app-header-link {
+  flex-shrink: 0;
+  white-space: nowrap;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 14px;
+  padding: 6px 0;
+  border-bottom: 2px solid transparent;
+}
+.app-header-link.active {
+  color: var(--text-h);
+  border-bottom-color: var(--accent);
+}
+
+/* 375px 등 좁은 화면에서는 로고+nav+로그아웃 한 줄에 다 안 들어가
+   nav가 overflow-x:auto로 스크롤되지만, 스크롤 가능 여부를 알리는
+   시각적 신호가 없어 "공고 달력" 링크가 화면 밖으로 완전히
+   가려져 사용자가 존재 자체를 모르는 상태였다(BranchDetailPage
+   모바일 검증 중 발견). 좁은 화면에서는 nav를 다음 줄로 내려
+   전체 폭을 쓰고 균등 배치해 모든 링크가 항상 보이게 한다. */
+@media (max-width: 480px) {
+  .app-header {
+    flex-wrap: wrap;
+    row-gap: 10px;
+  }
+  .app-header-nav {
+    order: 3;
+    flex-basis: 100%;
+    overflow-x: visible;
+    justify-content: space-between;
+  }
+}
+
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+}
+.app-main {
+  flex: 1;
+  padding: 32px 24px;
+  max-width: var(--container-app);
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* BranchForkPicker.tsx의 브랜치 목록 항목에서 아직 이 클래스명을 쓴다 */
+.version-meta {
+  color: var(--text);
+  font-size: 13px;
+}
+
+/* modal-overlay/modal-content 자체 시각 스타일은 Modal.tsx가
+   Tailwind로 직접 적용한다 — 여기 남은 규칙은 그 안의 form/fork-picker
+   레이아웃만 담당하는 훅이다 */
+.modal-content > form,
+.modal-content > h3 {
+  margin: 0 0 16px;
+}
+.modal-content form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.modal-content > .fork-picker {
+  margin-bottom: 16px;
+}
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.jd-import-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+.jd-import-row .field {
+  flex: 1;
+}
+.modal-divider-label {
+  position: relative;
+  text-align: center;
+  color: var(--text);
+  font-size: 12px;
+  margin: 0;
+}
+.modal-divider-label::before,
+.modal-divider-label::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: calc(50% - 60px);
+  border-top: 1px solid var(--border);
+}
+.modal-divider-label::before {
+  left: 0;
+}
+.modal-divider-label::after {
+  right: 0;
+}
+
+.fork-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: var(--font-sans);
+}
+.fork-picker-label {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+}
+.fork-picker-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-h);
+  cursor: pointer;
+}
+.fork-picker-toggle:hover {
+  border-color: var(--accent-border);
+}
+.fork-picker-chevron {
+  flex-shrink: 0;
+  transition: transform 0.15s;
+}
+.fork-picker-chevron.open {
+  transform: rotate(180deg);
+}
+.fork-picker-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+.fork-picker-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-h);
+}
+.fork-picker-item:hover {
+  border-color: var(--accent-border);
+}
+.fork-picker-item.active {
+  background: var(--accent-bg);
+  border-color: var(--accent-border);
+  font-weight: 600;
+}
+.fork-picker-item .version-meta {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+.fork-picker-item .version-meta .font-mono {
+  font-family: var(--font-mono);
+}
+.fork-picker-empty {
+  font-family: var(--font-sans);
+  color: var(--text);
+  font-size: 13px;
+  padding: 8px 0;
+}
+
+/* 공고 브랜치 상세는 겨냥 JD 정보 레일 + 본문이 나란히 붙어
+   .app-main의 기본 폭(--container-app, 960px)보다 넓은 공간이 필요하다.
+   페이지가 부모(.app-main)의 max-width 제약을 직접 벗어날 방법이
+   없어(브랜치 종류는 렌더 시점에 데이터로 결정되므로 셸에서
+   미리 알 수 없다) 뷰포트 기준 풀블리드 기법을 그대로 쓴다.
+
+   ⚠️ max-width로 상한(--container-wide)을 씌우는 시도는 하지 않는다 —
+   margin-left/right가 모두 고정값(calc(50%-50vw))인 상태에서 width만
+   캡으로 줄이면 CSS 과제약(over-constrained) 규칙에 따라 margin-right가
+   무시·재계산되어 초광폭 화면에서 왼쪽으로 쏠리는 회귀가 생긴다
+   (계산 확인: 1600px 뷰포트·1152px 캡 시 오른쪽에 448px가 몰림).
+   초광폭 모니터 대응이 필요해지면 Step 6에서 페이지가 이 padding을
+   직접 제어하는 구조로 다시 설계한다. */
+.branch-detail-jd-layout {
+  position: relative;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  padding: 0 32px;
+  box-sizing: border-box;
+}
+.feedback-sidebar-container {
+  position: absolute;
+  left: 32px;
+  top: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  z-index: 10;
+}
+.branch-main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@media (min-width: 1025px) {
+  .branch-detail-jd-layout.panel-open .branch-main {
+    transform: translateX(160px);
+  }
+}
+.branch-main .card {
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.branch-main .card > *:first-child {
+  margin-top: 20px;
+}
+.branch-main .card > *:last-child {
+  margin-bottom: 20px;
+}
+/* 84px/1fr 2열 grid 구조만 담당하는 훅 — 한 번뿐인 레이아웃이라
+   대괄호 임의값 대신 이 작은 클래스로 유지한다(BranchDetailPage.tsx) */
+.branch-meta-fields {
+  display: grid;
+  grid-template-columns: 84px 1fr;
+  row-gap: 10px;
+  column-gap: 12px;
+  margin: 0;
+}
+
+/* feedback-rail/feedback-panel-flyout은 이제 구조(sticky 위치·크기·
+   flex 방향)만 담당한다 — 배경·테두리·radius·색상은 각 컴포넌트가
+   Tailwind로 직접 적용한다(FeedbackHistoryPanel.tsx) */
+.feedback-rail {
+  position: sticky;
+  top: 16px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 72px;
+}
+.feedback-panel-flyout {
+  position: sticky;
+  top: 16px;
+  flex-shrink: 0;
+  width: 300px;
+  max-height: calc(100vh - 32px);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1024px) {
+  .branch-detail-jd-layout {
+    display: flex;
+    flex-direction: column;
+    padding: 0 16px;
+  }
+  .feedback-sidebar-container {
+    position: static;
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+  }
+  .feedback-rail {
+    position: static;
+    flex-direction: row;
+    width: 100%;
+  }
+  .feedback-rail-btn {
+    width: auto;
+    flex: 1;
+  }
+  .feedback-panel-flyout {
+    position: static;
+    width: 100%;
+    max-height: 360px;
+  }
+  .branch-main {
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}

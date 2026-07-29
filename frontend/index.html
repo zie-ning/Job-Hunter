@@ -1,10 +1,19 @@
 <!doctype html>
-<html lang="en">
+<html lang="ko">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>frontend</title>
+    <!-- 본문 전반에 쓰이는 폰트만 프리로드한다 (FOUT 최소화).
+         디스플레이 서체는 헤더 워드마크 정도로 쓰임이 작아 제외 -->
+    <link
+      rel="preload"
+      href="/fonts/PretendardVariable.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <title>Job Hunter</title>
   </head>
   <body>
     <div id="root"></div>
