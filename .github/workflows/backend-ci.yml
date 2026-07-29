@@ -17,6 +17,11 @@ jobs:
     defaults:
       run:
         working-directory: backend
+    env:
+      # app/db/session.py가 모듈 임포트 시점에 즉시 엔진을 생성하므로, 실제 DB에
+      # 접속하지 않는 테스트/임포트 검증 스텝도 파싱 가능한 URL 형식이 필요하다.
+      # 테스트는 SQLite로 get_db를 오버라이드해서 돌기 때문에 이 값으로 실제 접속을 시도하지 않는다.
+      DATABASE_URL: postgresql+asyncpg://ci:ci@localhost:5432/ci
     steps:
       - uses: actions/checkout@v4
 
