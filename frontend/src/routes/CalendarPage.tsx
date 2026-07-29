@@ -71,9 +71,9 @@ export function CalendarPage() {
   }
 
   return (
-    <div className="calendar-page">
+    <div className="flex flex-col gap-5">
       <Card>
-        <div className="calendar-header">
+        <div className="mb-4 flex items-center justify-between">
           <Button
             type="button"
             variant="secondary"
@@ -81,9 +81,15 @@ export function CalendarPage() {
           >
             ← 이전 달
           </Button>
-          <h2>
+          {/* h2 태그는 index.css의 레거시 규칙과 충돌한다
+              (docs/DESIGN.md §4 "알려진 한계" 참고) */}
+          <div
+            role="heading"
+            aria-level={2}
+            className="text-text-strong font-sans text-lg font-bold"
+          >
             {year}년 {month + 1}월
-          </h2>
+          </div>
           <Button
             type="button"
             variant="secondary"
@@ -92,28 +98,37 @@ export function CalendarPage() {
             다음 달 →
           </Button>
         </div>
-        <div className="calendar-grid">
+        <div className="grid grid-cols-7 gap-1">
           {WEEKDAY_LABELS.map((label) => (
-            <div key={label} className="calendar-weekday">
+            <div
+              key={label}
+              className="text-text-muted pb-2 text-center text-xs font-semibold"
+            >
               {label}
             </div>
           ))}
           {cells.map((cell, index) => (
             <div
               key={index}
-              className={
-                cell.day === null ? "calendar-cell empty" : "calendar-cell"
-              }
+              className={[
+                "flex min-h-22 flex-col gap-1 rounded-sm p-1.5",
+                cell.day === null
+                  ? "border border-transparent"
+                  : "border-border bg-surface border",
+              ].join(" ")}
             >
               {cell.day !== null && (
                 <>
-                  <span className="calendar-day-number">{cell.day}</span>
+                  <span className="text-text-muted font-mono text-xs">
+                    {cell.day}
+                  </span>
                   {cell.events.map((event) => (
                     <button
                       key={event.matchId}
                       type="button"
-                      className="calendar-event"
+                      title={event.company}
                       onClick={() => navigate(`/branches/${event.branchId}`)}
+                      className="bg-accent-soft text-accent hover:bg-accent hover:text-accent-on truncate rounded-sm px-1.5 py-0.5 text-left text-xs font-medium transition-colors"
                     >
                       {event.company}
                     </button>
