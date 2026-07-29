@@ -19,7 +19,6 @@
     rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
 
   --sans: system-ui, "Segoe UI", Roboto, sans-serif;
-  --heading: system-ui, "Segoe UI", Roboto, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
 
   /* 루트 font-size는 표준 16px로 둔다 — rem 기반 토큰(theme.css의
@@ -97,42 +96,13 @@ body::before {
     radial-gradient(680px 560px at -8% 108%, var(--bloom-2), transparent 60%);
 }
 
-/* Step 6 전까지 미전환 페이지(LoginPage/SignupPage/CalendarPage/
-   BranchDetailPage/BranchVersionDetailPage)가 이 태그 선택자들에
-   의존한다. @layer로 감싸 우선순위를 낮추는 시도를 해봤으나,
-   Tailwind Preflight 자체가 `h1,h2{font-size:inherit;
-   font-weight:inherit}` 리셋을 base 레이어에 이미 깔아두고 있어—
-   레이어로 감싸는 순간 이 리셋이 이겨버려 Tailwind 유틸리티를 전혀
-   쓰지 않는 페이지에서도 제목이 body 상속값(18px)으로 무너지는
-   회귀가 실제로 발생했다(로그인 화면에서 확인). 따라서 언레이어드
-   상태를 유지한다 — Tailwind 유틸리티가 필요한 새 화면(/design 등)은
-   h1/h2 태그 대신 role="heading"을 쓰는 요소로 피해간다
-   (DesignPlaygroundPage.tsx 참고) */
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
-
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
+/* 예전에는 여기 h1/h2 블랭킷 규칙이 있어 Tailwind 유틸리티를 명시도와
+   무관하게 이겼다(Preflight의 h1,h2{font-size:inherit} 리셋과 충돌해
+   @layer로 감싸는 시도도 실패했었다 — docs/DESIGN.md §4 참고). Step 6에서
+   모든 페이지가 <div role="heading" aria-level={n}>로 전환을 마치면서
+   이 규칙 자체가 죽은 코드가 되어 삭제했다. 새 화면도 계속 이 패턴을
+   쓴다 — 실제 h1/h2 태그로 되돌릴 실익이 없고, 한 가지 패턴으로
+   통일된 상태가 더 일관적이다. */
 p {
   margin: 0;
 }
