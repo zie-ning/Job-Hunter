@@ -304,16 +304,12 @@ export function BranchesPage() {
                   className="hover:shadow-e2 animate-fade-up flex items-center gap-5 transition-[box-shadow,transform] hover:-translate-y-0.5 motion-reduce:animate-none motion-reduce:hover:translate-y-0"
                 >
                   <div className="min-w-0 flex-1">
-                    <div className="flex min-w-0 items-center gap-2.5">
+                    <div className="flex flex-wrap items-center gap-2.5">
                       <span className="text-text-strong font-sans text-base font-bold">
                         {match?.company ?? "알 수 없는 공고"}
                       </span>
                       <span className="bg-border h-3 w-px shrink-0" />
-                      <span className="text-text truncate text-sm">
-                        {match?.title}
-                      </span>
-                    </div>
-                    <div className="mt-2 flex items-center gap-2">
+                      <span className="text-text text-sm">{match?.title}</span>
                       <Badge tone={BRANCH_STATUS_TONE[branch.status]}>
                         {BRANCH_STATUS_LABEL[branch.status]}
                       </Badge>
@@ -339,8 +335,8 @@ export function BranchesPage() {
                       </span>
                       {match && (
                         <span className="text-warning font-semibold">
-                          마감{" "}
-                          <span className="font-mono">
+                          <span className="text-warning">마감</span>{" "}
+                          <span className="text-warning font-mono">
                             {formatDate(match.deadline)}
                           </span>
                         </span>

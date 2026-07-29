@@ -30,9 +30,6 @@ export function ScoreGauge({ score, size = 64 }: ScoreGaugeProps) {
         <div className="text-text-strong font-mono text-lg font-bold tabular-nums">
           {score}
         </div>
-        <div className="text-text-muted mt-0.5 text-[9px] font-semibold tracking-wide uppercase">
-          match
-        </div>
       </div>
     </div>
   );
