@@ -9,3 +9,6 @@ Thumbs.db
 # Claude Code 로컬 개인 설정
 .claude/settings.local.json
 .claude/worktrees/
+
+# Playwright MCP 실행 아티팩트 (스크린샷/콘솔 로그/네트워크 덤프)
+.playwright-mcp/
