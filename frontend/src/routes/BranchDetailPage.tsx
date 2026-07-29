@@ -15,7 +15,6 @@ import { Button } from "../components/Button";
 import { TextField } from "../components/TextField";
 import { Textarea } from "../components/Textarea";
 import { ScoreDelta } from "../components/ScoreDelta";
-import { GapAnalysisSection } from "../components/GapAnalysisSection";
 import { FeedbackHistoryPanel } from "../components/FeedbackHistoryPanel";
 import { BranchSettingsMenu } from "../components/BranchSettingsMenu";
 import { Skeleton } from "../components/Skeleton";
@@ -112,6 +111,8 @@ export function BranchDetailPage() {
   const [isTogglingDefault, setIsTogglingDefault] = useState(false);
   const [isRequestingFeedback, setIsRequestingFeedback] = useState(false);
 
+  const [isPanelOpen, setIsPanelOpen] = useState(true);
+
   useEffect(() => {
     if (!id) return;
     void loadBranch(id);
@@ -201,11 +202,18 @@ export function BranchDetailPage() {
 
   if (branch.kind === "jd") {
     return (
-      <div className="branch-detail-jd-layout">
+      <div
+        className={[
+          "branch-detail-jd-layout",
+          isPanelOpen ? "panel-open" : "panel-closed",
+        ].join(" ")}
+      >
         <FeedbackHistoryPanel
           history={gapHistory ?? []}
           isLoading={isRequestingFeedback}
           onRequest={handleRequestFeedback}
+          isOpen={isPanelOpen}
+          onToggleOpen={setIsPanelOpen}
         />
 
         <div className="branch-main">
@@ -222,6 +230,9 @@ export function BranchDetailPage() {
               <BranchSettingsMenu
                 status={branch.status}
                 onChangeStatus={handleChangeStatus}
+                isDefault={branch.isDefault}
+                onToggleDefault={handleToggleDefault}
+                isTogglingDefault={isTogglingDefault}
               />
             </div>
             {/* branch-meta-fields는 84px/1fr 2열 grid 구조만 담당하는
@@ -318,70 +329,72 @@ export function BranchDetailPage() {
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <Card>
-        <div className="mb-4 flex items-start justify-between">
-          <div>
-            <Heading level={2} className="mb-1 text-lg">
-              {branch.name}
+    <div
+      className={[
+        "branch-detail-jd-layout",
+        isPanelOpen ? "panel-open" : "panel-closed",
+      ].join(" ")}
+    >
+      <FeedbackHistoryPanel
+        history={gapHistory ?? []}
+        isLoading={isRequestingFeedback}
+        onRequest={handleRequestFeedback}
+        isOpen={isPanelOpen}
+        onToggleOpen={setIsPanelOpen}
+        hideGapTab
+      />
+
+      <div className="branch-main">
+        <Card>
+          <div className="flex items-start justify-between">
+            <div>
+              <Heading level={2} className="mb-1 text-lg">
+                {branch.name}
+              </Heading>
+              <p className="text-text text-sm">범용 브랜치</p>
+            </div>
+            <BranchSettingsMenu
+              status={branch.status}
+              onChangeStatus={handleChangeStatus}
+              isDefault={branch.isDefault}
+              onToggleDefault={handleToggleDefault}
+              isTogglingDefault={isTogglingDefault}
+            />
+          </div>
+        </Card>
+
+        <Card>
+          <div className="flex items-center justify-between">
+            <Heading level={3} className="text-base">
+              이력서 편집
             </Heading>
-            <p className="text-text text-sm">범용 브랜치</p>
+            <ReuploadLink onUpload={handleUpload} />
           </div>
-          <div className="flex items-center gap-2">
-            {branch.isDefault && <Badge tone="neutral">기본</Badge>}
-            <Badge tone={BRANCH_STATUS_TONE[branch.status]}>
-              {BRANCH_STATUS_LABEL[branch.status]}
-            </Badge>
-          </div>
-        </div>
-        <Button
-          variant="secondary"
-          type="button"
-          onClick={handleToggleDefault}
-          isLoading={isTogglingDefault}
-        >
-          {branch.isDefault ? "기본 브랜치 해제" : "기본 브랜치로 설정"}
-        </Button>
-      </Card>
+          <form onSubmit={handleSave} className="mt-4 flex flex-col gap-4">
+            <Textarea
+              label="이력서 내용"
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+            />
+            <TextField
+              label="커밋 메시지 (선택)"
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              placeholder="이번에 무엇을 바꿨는지 짧게 남겨보세요"
+            />
+            <Button type="submit" isLoading={isSaving} className="self-start">
+              저장하고 새 버전 만들기
+            </Button>
+          </form>
+        </Card>
 
-      <Card>
-        <div className="flex items-center justify-between">
+        <Card>
           <Heading level={3} className="text-base">
-            이력서 편집
+            버전 이력 (커밋 로그)
           </Heading>
-          <ReuploadLink onUpload={handleUpload} />
-        </div>
-        <form onSubmit={handleSave} className="mt-4 flex flex-col gap-4">
-          <Textarea
-            label="이력서 내용"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-          />
-          <TextField
-            label="커밋 메시지 (선택)"
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-            placeholder="이번에 무엇을 바꿨는지 짧게 남겨보세요"
-          />
-          <Button type="submit" isLoading={isSaving} className="self-start">
-            저장하고 새 버전 만들기
-          </Button>
-        </form>
-      </Card>
-
-      <Card>
-        <Heading level={3} className="text-base">
-          버전 이력 (커밋 로그)
-        </Heading>
-        <VersionList branch={branch} match={null} />
-
-        {gapHistory !== undefined && (
-          <GapAnalysisSection
-            branchId={branch.id}
-            initialResult={gapHistory[0] ?? null}
-          />
-        )}
-      </Card>
+          <VersionList branch={branch} match={null} />
+        </Card>
+      </div>
     </div>
   );
 }

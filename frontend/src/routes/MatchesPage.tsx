@@ -97,9 +97,9 @@ export function MatchesPage() {
               </Badge>
             ))}
           </div>
-          <p className="text-text-muted mt-auto text-xs">
+          <p className="text-warning mt-auto text-xs font-semibold">
             마감{" "}
-            <span className="text-warning font-mono font-semibold">
+            <span className="font-mono font-semibold">
               {formatDeadline(match.deadline)}
             </span>
           </p>

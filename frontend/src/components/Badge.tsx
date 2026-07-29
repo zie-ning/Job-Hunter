@@ -1,6 +1,7 @@
 interface BadgeProps {
   tone: "positive" | "warning" | "danger" | "neutral";
   size?: "sm" | "md";
+  className?: string;
   children: React.ReactNode;
 }
 
@@ -16,11 +17,14 @@ const SIZE_CLASSES: Record<NonNullable<BadgeProps["size"]>, string> = {
   md: "px-2 py-0.5 text-xs",
 };
 
-export function Badge({ tone, size = "md", children }: BadgeProps) {
+export function Badge({ tone, size = "md", className, children }: BadgeProps) {
   const classes = [
     "inline-flex items-center rounded-sm font-semibold",
     TONE_CLASSES[tone],
     SIZE_CLASSES[size],
-  ].join(" ");
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
   return <span className={classes}>{children}</span>;
 }

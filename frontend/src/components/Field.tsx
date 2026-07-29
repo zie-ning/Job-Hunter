@@ -1,7 +1,7 @@
 import { useId, type ReactNode } from "react";
 
 interface FieldProps {
-  label: string;
+  label?: string;
   helperText?: string;
   error?: string;
   required?: boolean;
@@ -54,10 +54,12 @@ export function Field({
         .filter(Boolean)
         .join(" ")}
     >
-      <label htmlFor={inputId} className="text-text text-sm font-medium">
-        {label}
-        {required && <span className="text-danger ml-0.5">*</span>}
-      </label>
+      {label && (
+        <label htmlFor={inputId} className="text-text text-sm font-medium">
+          {label}
+          {required && <span className="text-danger ml-0.5">*</span>}
+        </label>
+      )}
       {children(inputId)}
       {helperText && !error && (
         <p id={helperId} className="text-text-muted text-xs">

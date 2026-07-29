@@ -2,7 +2,6 @@ import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AppLayout } from "./layout/AppLayout";
 import { LoginPage } from "./routes/LoginPage";
-import { SignupPage } from "./routes/SignupPage";
 import { MatchesPage } from "./routes/MatchesPage";
 import { BranchesPage } from "./routes/BranchesPage";
 import { BranchDetailPage } from "./routes/BranchDetailPage";
@@ -22,7 +21,7 @@ function App() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/signup" element={<SignupPage />} />
+      <Route path="/signup" element={<Navigate to="/login" replace />} />
       {import.meta.env.DEV && (
         <Route
           path="/design"

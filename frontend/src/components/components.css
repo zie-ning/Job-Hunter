@@ -161,9 +161,12 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
+  font-family: var(--font-sans);
 }
 .fork-picker-label {
+  font-family: var(--font-sans);
   font-size: 13px;
+  font-weight: 500;
   color: var(--text);
 }
 .fork-picker-toggle {
@@ -171,10 +174,11 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  font: inherit;
-  font-size: 15px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
   padding: 10px 12px;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--border);
   background: var(--bg);
   color: var(--text-h);
@@ -203,13 +207,16 @@
 .fork-picker-item {
   width: 100%;
   display: flex;
+  align-items: center;
   justify-content: space-between;
   padding: 10px 12px;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   background: var(--bg);
   cursor: pointer;
-  font: inherit;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
   color: var(--text-h);
 }
 .fork-picker-item:hover {
@@ -218,8 +225,19 @@
 .fork-picker-item.active {
   background: var(--accent-bg);
   border-color: var(--accent-border);
+  font-weight: 600;
+}
+.fork-picker-item .version-meta {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+.fork-picker-item .version-meta .font-mono {
+  font-family: var(--font-mono);
 }
 .fork-picker-empty {
+  font-family: var(--font-sans);
   color: var(--text);
   font-size: 13px;
   padding: 8px 0;
@@ -239,22 +257,36 @@
    초광폭 모니터 대응이 필요해지면 Step 6에서 페이지가 이 padding을
    직접 제어하는 구조로 다시 설계한다. */
 .branch-detail-jd-layout {
-  display: flex;
-  align-items: flex-start;
-  gap: 20px;
+  position: relative;
   width: 100vw;
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
   padding: 0 32px;
   box-sizing: border-box;
 }
+.feedback-sidebar-container {
+  position: absolute;
+  left: 32px;
+  top: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  z-index: 10;
+}
 .branch-main {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  flex: 1;
-  min-width: 0;
+  width: 100%;
   max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@media (min-width: 1025px) {
+  .branch-detail-jd-layout.panel-open .branch-main {
+    transform: translateX(160px);
+  }
 }
 .branch-main .card {
   padding-left: 24px;
@@ -303,8 +335,15 @@
 
 @media (max-width: 1024px) {
   .branch-detail-jd-layout {
+    display: flex;
     flex-direction: column;
     padding: 0 16px;
+  }
+  .feedback-sidebar-container {
+    position: static;
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
   }
   .feedback-rail {
     position: static;
@@ -322,5 +361,7 @@
   }
   .branch-main {
     max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
   }
 }

@@ -53,7 +53,7 @@ export function BranchForkPicker({
       : undefined;
   const selectedLabel =
     value.type === "fresh"
-      ? "새로 시작하기 (빈 이력서)"
+      ? "새로 시작하기"
       : (selectedBranch && branchLabel(selectedBranch, matches)) ||
         "브랜치를 선택하세요";
 
@@ -95,7 +95,11 @@ export function BranchForkPicker({
                 <span>{branchLabel(branch, matches)}</span>
                 <span className="version-meta">
                   최근 수정{" "}
-                  {new Date(lastModifiedAt(branch)).toLocaleDateString("ko-KR")}
+                  <span className="font-mono">
+                    {new Date(lastModifiedAt(branch)).toLocaleDateString(
+                      "ko-KR",
+                    )}
+                  </span>
                 </span>
               </button>
             </li>

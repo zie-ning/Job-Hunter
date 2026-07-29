@@ -39,8 +39,8 @@ export function ChevronDownIcon(props: IconProps) {
 export function GearIcon(props: IconProps) {
   return (
     <IconBase size={18} {...props}>
-      <circle cx="12" cy="12" r="7.5" strokeDasharray="2.2 3.4" />
-      <circle cx="12" cy="12" r="2.75" />
+      <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+      <circle cx="12" cy="12" r="3" />
     </IconBase>
   );
 }
@@ -110,5 +110,35 @@ export function StarIcon(props: IconProps) {
     <IconBase size={13} fill="currentColor" stroke="none" {...props}>
       <path d="M12 2l2.9 6.3 6.9.8-5 4.7 1.3 6.8-6.1-3.4-6.1 3.4L7.2 13.8l-5-4.7 6.9-.8z" />
     </IconBase>
+  );
+}
+
+export function KakaoIcon(props: IconProps) {
+  return (
+    <svg
+      width={props.size || 18}
+      height={props.size || 18}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+      {...props}
+    >
+      <path d="M12 3C6.477 3 2 6.477 2 10.765c0 2.766 1.83 5.19 4.606 6.586-.201.751-.726 2.721-.832 3.14-.132.525.193.518.406.377.168-.112 2.678-1.82 3.766-2.556.671.096 1.36.147 2.054.147 5.523 0 10-3.477 10-7.765C22 6.477 17.523 3 12 3z" />
+    </svg>
+  );
+}
+
+export function PinIcon(props: IconProps) {
+  return (
+    <svg
+      width={props.size || 15}
+      height={props.size || 15}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+      {...props}
+    >
+      <path d="M16 12V4h1V2H7v2h1v8l-2 2v2h5v6h2v-6h5v-2l-2-2z" />
+    </svg>
   );
 }
