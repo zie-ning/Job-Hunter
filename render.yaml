@@ -22,8 +22,18 @@ services:
         sync: false # Supabase connection string (postgresql+asyncpg://...)
       - key: SECRET_KEY
         generateValue: true # Render가 안전한 랜덤 값을 자동 생성
+      - key: JWT_ALGORITHM
+        value: HS256
       - key: ACCESS_TOKEN_EXPIRE_MINUTES
-        value: "1440"
+        value: "30"
+      - key: REFRESH_TOKEN_EXPIRE_DAYS
+        value: "30"
+      - key: KAKAO_CLIENT_ID
+        sync: false # 카카오 디벨로퍼스 콘솔의 REST API 키
+      - key: KAKAO_CLIENT_SECRET
+        sync: false # 콘솔에서 "Client Secret 사용"을 켠 경우에만 필요, 안 켰으면 빈 값으로 둬도 됨
+      - key: KAKAO_REDIRECT_URI
+        sync: false # 배포된 프론트 도메인 확정 후 입력 (예: https://job-hunter.vercel.app/auth/kakao/callback)
       - key: OPENAI_API_KEY
         sync: false
       - key: CORS_ORIGINS
