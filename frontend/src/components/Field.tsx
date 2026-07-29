@@ -19,10 +19,10 @@ export const FIELD_INPUT_CLASSES =
 
 /**
  * TextField/Textarea/Select의 공통 래퍼. "field" 클래스는 자체 스타일이
- * 없는 구조적 훅이다 — .jd-import-row .field / .branch-toolbar .field
- * 처럼 아직 Tailwind로 옮기지 않은 페이지 레벨 CSS가 이 이름으로
- * 레이아웃을 조정한다. 실제 입력 요소 스타일은 FIELD_INPUT_CLASSES를
- * 각 컴포넌트가 자신의 input/select/textarea에 직접 적용한다.
+ * 없는 구조적 훅이다 — NewJdBranchModal의 `.jd-import-row .field`가
+ * 아직 이 이름으로 레이아웃(flex-basis)을 조정한다. 실제 입력 요소
+ * 스타일은 FIELD_INPUT_CLASSES를 각 컴포넌트가 자신의
+ * input/select/textarea에 직접 적용한다.
  *
  * className은 이 래퍼 div에 적용한다 — 입력 요소에 적용하면 flex-1/
  * min-w-*처럼 "이 필드가 부모 레이아웃에서 얼마나 차지할지"를 정하는

@@ -15,8 +15,8 @@
 /* .field 자체는 이제 스타일이 없는 구조적 훅이다 — Field.tsx가
    flex/flex-col/gap을 Tailwind 유틸리티로 직접 적용한다. label/input/
    select/textarea 스타일도 TextField.tsx/Textarea.tsx/Select.tsx가
-   FIELD_INPUT_CLASSES로 직접 적용한다. 아래 두 compound 선택자만
-   Step 6 전까지 이 클래스명을 훅으로 계속 사용한다. */
+   FIELD_INPUT_CLASSES로 직접 적용한다. NewJdBranchModal이 아직 Tailwind로
+   옮기지 않아, 아래 .jd-import-row .field 훅만 계속 이 클래스명을 쓴다. */
 
 /* 375px 등 좁은 화면에서 로고/nav/로그아웃이 한 줄을 두고 다투다가
    글자 단위로 줄바꿈되는 문제가 있었다 — 로고·nav 링크는 nowrap으로

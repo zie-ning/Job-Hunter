@@ -55,7 +55,7 @@ frontend-slides 스킬의 "Show, Don't Tell" 방식으로 브랜치 목록 화�
 
 ## 2. 토큰 레퍼런스
 
-> Step 1에서 `frontend/src/styles/theme.css`의 `@theme` 블록 작성 후 이 섹션을 채운다. 아래는 Step 0에서 확정된 D안의 원시값이며, `theme.css`와 1:1 대응해야 한다.
+아래는 Step 0에서 확정된 D안의 원시값이며, `frontend/src/styles/theme.css`의 `@theme` 블록과 1:1 대응한다. 값을 바꿀 때는 두 곳을 함께 갱신한다.
 
 ### 색상 (라이트)
 
@@ -118,11 +118,27 @@ C 구조 채택에 따라 pill(999px) 대신 각진 스케일을 쓴다.
 - D안 프리뷰가 썼던 IBM Plex Mono는 **셀프호스팅하지 않는다** — Step 2에서 승인받은 다운로드 범위는 Pretendard·Plus Jakarta Sans 2개뿐이었고, 원래 계획도 숫자 정렬을 별도 웹폰트가 아니라 `font-variant-numeric: tabular-nums`로 구현하도록 되어 있었다. `--font-mono`는 순수 시스템 폴백 스택으로만 유지한다
 - 두 파일 모두 `frontend/public/fonts/`에 위치하며 `index.html`에서 Pretendard만 `<link rel="preload">` — 실제 쓰임이 큰 폰트만 우선 로드해 FOUT을 최소화한다
 
+### 모션 (Step 7)
+
+| 토큰 | 값 | 용도 |
+|---|---|---|
+| `--ease-out-expo` | `cubic-bezier(0.16, 1, 0.3, 1)` | 진입 계열 애니메이션의 공통 이징 |
+| `--animate-fade-in` | `fade-in 0.15s ease-out both` | 모달 오버레이, 피드백 flyout 패널 진입 |
+| `--animate-fade-scale` | `fade-scale 0.18s var(--ease-out-expo) both` | 모달 콘텐츠 진입(fade + scale) |
+| `--animate-fade-up` | `fade-up 0.4s var(--ease-out-expo) both` | 리스트 항목 stagger reveal(아래에서 살짝 떠오르며 등장) |
+| `--animate-shimmer` | `shimmer 1.6s ease-in-out infinite` | `Skeleton`의 좌우 하이라이트 스침 |
+
+**리스트 stagger reveal**: 항목별 진입 지연(`animation-delay`)은 인덱스에 따라 달라지는 동적 값이라 Tailwind 클래스로 표현할 수 없다 — `ScoreGauge`의 `conic-gradient`와 동일한 예외로, `index * 40`ms를 `style={{ animationDelay }}`로 전달하고 `animate-fade-up`과 함께 쓴다(`BranchesPage`/`MatchesPage` 참고). 40ms 간격은 카드 6~8개 기준 마지막 항목이 300ms 안팎에 들어오도록 잡은 값이다 — 리스트가 훨씬 길어지면 간격을 줄이는 것을 고려한다.
+
+**카드 hover lift**: 클릭 가능한 카드(브랜치 목록의 두 카드 유형)는 `hover:shadow-e2`(elevation 상승)에 `hover:-translate-y-0.5`(2px 부상)를 함께 준다 — 그림자만으로는 피드백이 약해 실제로 뜨는 느낌을 더한다. 카드 내부에 자체 인터랙션(버튼)이 있는 경우(`MatchesPage`의 매칭 카드)는 카드 전체 lift를 주지 않는다 — 버튼 자체의 hover와 겹쳐 이중 피드백이 되는 것을 피한다.
+
+**`prefers-reduced-motion` 대응 필수**: 새로 추가하는 모든 `animate-*`/`hover:-translate-y-*`에는 반드시 `motion-reduce:animate-none` 또는 `motion-reduce:hover:translate-y-0`을 짝지어 붙인다. `Button`이 이 패턴의 기준 예시다.
+
 ---
 
 ## 3. 컴포넌트 카탈로그
 
-모든 컴포넌트는 Tailwind 유틸리티로 직접 스타일링한다. 단, 아직 Step 6(페이지 재단) 전인 페이지 레벨 CSS가 특정 클래스명을 훅으로 참조하는 경우(`card`, `field`, `modal-overlay`, `modal-content`) 해당 클래스명은 자체 스타일 없이 구조적 훅으로만 유지한다 — 각 컴포넌트 파일 상단 주석에 근거를 남겼다.
+모든 컴포넌트는 Tailwind 유틸리티로 직접 스타일링한다. 단, 특정 클래스명이 여러 컴포넌트/페이지에 걸친 구조적 훅으로 쓰이는 경우(`card`, `field`, `modal-overlay`, `modal-content`) 해당 클래스명은 자체 스타일 없이 훅으로만 유지한다 — 각 컴포넌트 파일 상단 주석에 근거를 남겼다. Step 6(페이지 재단)가 모두 끝난 지금도 이 훅들은 임시가 아니라 계속 남는 구조다(아래 "알려진 예외" 참고).
 
 | 컴포넌트 | variant / size | 비고 |
 |---|---|---|
@@ -130,8 +146,8 @@ C 구조 채택에 따라 pill(999px) 대신 각진 스케일을 쓴다.
 | `Card` / `CardHeader` / `CardFooter` | padding: none/sm/md · elevation: flat/raised | `"card"`는 구조적 훅(위 참고) |
 | `Badge` | tone: positive/warning/danger/neutral · size: sm/md | C안 구조에 따라 필(pill) 대신 각진 사각형(`rounded-sm`) |
 | `Field` (공통) + `TextField`/`Textarea`/`Select` | — | `useId()`로 id 생성 — 예전엔 `id ?? label` 폴백으로 한글 label 문자열이 그대로 DOM id가 되는 버그가 있었다. `helperText`/`error`/`required` 지원. `Select`는 `appearance-none` + `ChevronDownIcon` 커스텀 화살표 |
-| `Modal` | `wide?: boolean` | `ForkPickerModal`/`NewBranchModal`/`NewJdBranchModal`의 3중 복붙 제거. focus trap(Tab 순환) + Escape 닫기 + body 스크롤 락 + fade/scale 진입 애니메이션(`--animate-fade-scale`) |
-| `Skeleton` | — | `불러오는 중...` 텍스트 4곳(MatchesPage/BranchesPage/BranchDetailPage/BranchVersionDetailPage) 교체. `animate-pulse` |
+| `Modal` | `wide?: boolean` | `ForkPickerModal`/`NewBranchModal`/`NewJdBranchModal`의 3중 복붙 제거. focus trap(Tab 순환) + Escape 닫기 + body 스크롤 락 + fade/scale 진입 애니메이션(`--animate-fade-scale`, `motion-reduce:animate-none`) |
+| `Skeleton` | — | `불러오는 중...` 텍스트 4곳(MatchesPage/BranchesPage/BranchDetailPage/BranchVersionDetailPage) 전부 교체 완료. 좌우로 스치는 shimmer(`--animate-shimmer` + `.skeleton-shimmer-bg` 그라디언트 훅) |
 | `Spinner` | `size?` | Button의 `isLoading`, 필요 시 단독 사용 |
 | `components/icons/` | `ChevronDownIcon`/`GearIcon`/`GapAnalysisIcon`/`ReviewIcon`/`CloseIcon`/`ScoreUpIcon`/`ScoreDownIcon`/`ScoreFlatIcon` | 5개 컴포넌트에 흩어져 있던 인라인 SVG를 통합, `stroke-width` 1.6~1.8 제각각이던 걸 1.75로 통일 |
 | `EmptyState` | `icon?` 슬롯 | |
@@ -140,11 +156,11 @@ C 구조 채택에 따라 pill(999px) 대신 각진 스케일을 쓴다.
 
 ### 알려진 예외 — 페이지 레벨 CSS 훅
 
-Step 6에서 해당 페이지를 재작성할 때 함께 제거될 임시 상태다.
+Step 6(페이지 재단) 완료 후 확정된 상태 — 아래 두 가지는 임시가 아니라 계속 유지되는 구조적 훅이다.
 
-- `"field"` — `.jd-import-row .field`, `.branch-toolbar .field(:has(select))`가 레이아웃(flex-basis)을 조정
-- `"card"` — `.branch-main .card`(패딩 제거)가 오버라이드 (`.auth-page .card`는 LoginPage/SignupPage 재단으로 제거됨)
-- `"modal-overlay"`/`"modal-content"` — `.modal-content > form`, `.modal-content form`, `.modal-content > .fork-picker`, `.jd-import-row`, `.modal-divider-label` 등 모달 내부 폼 레이아웃이 이 이름을 훅으로 사용
+- `"field"` — 모달 계열은 아직 Tailwind로 옮기지 않았다: `NewJdBranchModal`의 `.jd-import-row .field`가 레이아웃(flex-basis)을 조정한다. `BranchesPage` 등 Step 6에서 재단된 페이지는 이제 이 훅을 쓰지 않고 `TextField`/`Select`의 `className` prop으로 직접 레이아웃을 지정한다
+- `"card"` — `BranchDetailPage`(공고 브랜치 상세)의 `.branch-main .card`가 패딩을 제거해 오버라이드한다. 이 카드는 내부에서 상단 메타정보 섹션과 편집기 섹션을 시각적으로 하나의 연속된 면처럼 이어붙이는 레이아웃이라 기본 카드 패딩과 충돌한다 — 구조적으로 계속 필요하다(`.auth-page .card`는 LoginPage/SignupPage 재단으로 이미 제거됨)
+- `"modal-overlay"`/`"modal-content"` — `.modal-content > form`, `.modal-content form`, `.modal-content > .fork-picker`, `.jd-import-row`, `.modal-divider-label` 등 모달 내부 폼 레이아웃이 이 이름을 훅으로 계속 사용한다. `Modal` 컴포넌트 자체의 배경·테두리·radius·모션은 전부 Tailwind로 직접 적용되어 있다
 
 ## 4. 레이아웃 규칙
 
@@ -174,25 +190,25 @@ Step 6에서 해당 페이지를 재작성할 때 함께 제거될 임시 상태
 
 그래서 현재는 뷰포트 기준 풀블리드 기법(`width: 100vw; margin-left/right: calc(50% - 50vw)`)을 그대로 쓴다. `--container-wide`로 상한을 씌우는 시도를 해봤으나, `margin-left`/`margin-right`가 둘 다 고정값인 상태에서 `width`만 캡으로 줄이면 CSS 과제약(over-constrained) 규칙에 따라 `margin-right`가 무시되고 재계산되어 **초광폭 화면에서 콘텐츠가 왼쪽으로 쏠리는 회귀**가 생긴다(1600px 뷰포트·1152px 캡 기준 계산으로 확인: 우측에 448px가 몰림). 무리하게 지금 봉합하기보다, Step 6에서 페이지가 이 컨테이너를 직접 제어하는 구조로 재설계할 때 함께 해결한다.
 
-### 알려진 한계 — `<h1>`/`<h2>` 태그와 Tailwind 유틸리티 충돌
+### (해결됨) `<h1>`/`<h2>` 태그와 Tailwind 유틸리티 충돌
 
-`index.css`에 `h1, h2 { font-family: var(--heading); font-weight: 500; color: var(--text-h); }` + `h1{font-size:56px;...}` + `h2{font-size:24px;...}` 블랭킷 규칙이 남아 있다. Step 6 전까지 `LoginPage`/`SignupPage`/`CalendarPage`/`BranchDetailPage`/`BranchVersionDetailPage`가 이 규칙에 의존하므로 삭제할 수 없다.
-
-문제: 이 규칙은 언레이어드 plain CSS라 Tailwind 유틸리티 클래스(`text-3xl`, `font-bold` 등)를 **명시도와 무관하게** 이겨버린다. `/design` 페이지 제작 중 `<h1 className="text-text-strong text-3xl font-bold">`가 옛 스타일 그대로 나오는 것으로 발견했다.
+Step 6 진행 중에는 `index.css`에 `h1, h2 { font-family: var(--heading); font-weight: 500; color: var(--text-h); }` + `h1{font-size:56px;...}` + `h2{font-size:24px;...}` 블랭킷 규칙이 남아 있었다. 이 규칙은 언레이어드 plain CSS라 Tailwind 유틸리티 클래스(`text-3xl`, `font-bold` 등)를 **명시도와 무관하게** 이겨버렸다 — `/design` 페이지 제작 중 `<h1 className="text-text-strong text-3xl font-bold">`가 옛 스타일 그대로 나오는 것으로 발견했다.
 
 **시도했지만 실패한 방법**: 이 규칙을 `@layer legacy { ... }`로 감싸 우선순위를 낮추면 Tailwind 유틸리티가 이길 것이라 예상했으나, Tailwind Preflight 자체가 이미 `h1,h2{font-size:inherit;font-weight:inherit}` 리셋을 `base` 레이어에 깔아두고 있어서, 레이어로 감싸는 즉시 **Tailwind 유틸리티를 전혀 쓰지 않는 미전환 페이지에서도** 제목이 `body` 상속값(18px)으로 무너지는 회귀가 실제로 발생했다(로그인 화면에서 확인 후 되돌림).
 
-**채택한 해결책**: Tailwind 타이포그래피가 필요한 새 화면은 `<h1>`/`<h2>` 태그 대신 `<div role="heading" aria-level={1|2}>`를 쓴다. 접근성 트리에는 실제 heading과 동일하게 노출되면서, 레거시 태그 선택자와 아예 충돌하지 않는다. 예시: `frontend/src/routes/DesignPlaygroundPage.tsx`의 `Section` 컴포넌트. **Step 6에서 모든 페이지가 전환되고 나면** 이 레거시 규칙 자체를 삭제하고 일반 `<h1>`/`<h2>` 태그로 되돌릴 수 있다.
+**채택한 해결책**: 과도기 동안 Tailwind 타이포그래피가 필요한 화면은 `<h1>`/`<h2>` 태그 대신 `<div role="heading" aria-level={1|2}>`를 썼다. 접근성 트리에는 실제 heading과 동일하게 노출되면서, 레거시 태그 선택자와 아예 충돌하지 않는다.
+
+**Step 6 전체 페이지 전환 완료 후**: 앱 전체에서 `<h1>`/`<h2>` 태그를 쓰는 곳이 0건이 되어, `index.css`의 레거시 블랭킷 규칙과 `--heading` 변수를 완전히 삭제했다(더 이상 충돌할 대상 자체가 없다). `<div role="heading" aria-level={n}>` 패턴은 실제 태그로 되돌리지 않고 그대로 유지한다 — 지금 와서 일부만 되돌리면 두 가지 패턴이 혼재해 오히려 일관성이 떨어지고, 되돌릴 기능적 실익도 없다(접근성 트리 노출은 이미 동일). **새 화면도 이 패턴을 계속 쓴다.**
 
 ## 5. 금지 규칙
 
 §1의 "하지 말 것" 참고. 추가 규칙:
 
 - Tailwind 대괄호 이스케이프(`p-[13px]`) 금지 — 필요하면 `theme.css`에 토큰 추가
-- 인라인 `style` 속성 금지 (동적 값 예외: `--p`, `--gc` 같은 CSS 커스텀 프로퍼티 전달)
+- 인라인 `style` 속성 금지 (동적 값 예외: `ScoreGauge`의 `conic-gradient`/`mask`, 리스트 stagger의 `animationDelay`처럼 인스턴스마다 달라지는 값이라 Tailwind 클래스로 표현 자체가 불가능한 경우만. 정적으로 표현 가능한 값을 인라인 style로 쓰는 것은 여전히 금지)
 - `theme.css` 밖에서 리터럴 색상값/px 값 선언 금지
 - `!important` 금지
-- 새 제목에 Tailwind 타이포그래피 유틸리티가 필요하면 `<h1>`/`<h2>` 대신 `<div role="heading" aria-level={n}>` 사용 (§4 "알려진 한계" 참고. Step 6에서 전체 페이지 전환 완료 후 이 규칙은 해제 예정)
+- 제목은 `<h1>`/`<h2>` 대신 `<div role="heading" aria-level={n}>` 사용 (§4 "(해결됨)" 항목 참고 — 원래는 레거시 CSS와의 충돌을 피하기 위한 과도기 조치였으나, 그 레거시 규칙 자체를 삭제한 뒤에도 일관성을 위해 계속 이 패턴을 표준으로 쓴다)
 
 ## 6. 신규 화면 체크리스트
 
@@ -206,7 +222,6 @@ Step 6에서 해당 페이지를 재작성할 때 함께 제거될 임시 상태
 - [ ] `<h1>`/`<h2>`에 Tailwind 유틸리티가 필요하면 `role="heading"` div로 작성했는가 (§4/§5 참고)
 - [ ] 로딩 상태는 `불러오는 중...` 텍스트가 아니라 `Skeleton`/`Spinner`를 쓰는가
 - [ ] 모달이 필요하면 새로 만들지 않고 `Modal` 컴포넌트를 재사용하는가
+- [ ] 리스트 진입에 `animate-fade-up` stagger reveal을 적용했는가, 새 `animate-*`/`hover:-translate-y-*`마다 `motion-reduce:` 짝을 붙였는가 (§2 "모션" 참고)
 - [ ] `/design` 페이지에 새 컴포넌트의 모든 variant·상태를 추가했는가
 - [ ] `npm run lint && npm run format:check && npm run build` 통과했는가
-
-> Step 5(`/design` 플레이그라운드) 완료 후 작성한다.
