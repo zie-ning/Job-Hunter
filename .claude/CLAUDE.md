@@ -4,7 +4,7 @@
 
 ## 프로젝트 개요
 
-개발자 취업을 준비하는 개인을 위한 이력서 첨삭 AI 에이전트 서비스이자, **개발자 취업 포트폴리오**로 활용될 저장소다. 자세한 제품 요구사항은 [docs/PRD.md](docs/PRD.md), 실행 로드맵은 [docs/ROADMAP.md](docs/ROADMAP.md)를 참고한다.
+개발자 취업을 준비하는 개인을 위한 이력서 버전관리 및 이력서 첨삭 AI 에이전트 서비스이자, **개발자 취업 포트폴리오**로 활용될 저장소다. 자세한 제품 요구사항은 [docs/PRD.md](docs/PRD.md), 실행 로드맵은 [docs/ROADMAP.md](docs/ROADMAP.md)를 참고한다.
 
 핵심 파이프라인: 원티드/워크넷 JD 수집 → 공고분석 에이전트(구조화) → pgvector 벡터 유사도 매칭(자동·저비용) → 임계치 초과 시 슬랙 알림 → 사용자가 JD별 브랜치에서 온디맨드로 요청할 때만 LLM 갭분석·RAG 첨삭 실행
 
@@ -12,7 +12,7 @@
 
 - **백엔드** (`backend/`): Python + FastAPI, 비동기 SQLAlchemy + asyncpg, Alembic 마이그레이션, Postgres(pgvector 확장) — Supabase 호스팅. OpenAI API로 구조화 출력(JD 분석)과 RAG 첨삭 수행.
   - `app/api/routes/` API 엔드포인트, `app/core/` 설정, `app/db/` 세션/연결, `app/models/` ORM 모델, `app/schemas/` Pydantic 스키마, `app/services/` 비즈니스 로직
-- **프론트엔드** (`frontend/`): React 19 + Vite + TypeScript, React Router. 백엔드와 완전히 분리된 SPA (서버 런타임 없음 — 로직이 FastAPI 한 곳에만 존재하도록 하는 설계 결정, ROADMAP.md Phase 0 참고). 린트는 ESLint가 아닌 `oxlint` 사용.
+- **프론트엔드** (`frontend/`): React 19 + Vite + TypeScript, React Router. 백엔드와 완전히 분리된 SPA (서버 런타임 없음 — 로직이 FastAPI 한 곳에만 존재하도록 하는 설계 결정, ROADMAP.md Phase 0 참고). 린트는 `oxlint` 사용.
 
 ## 작업 방식 (포트폴리오 저장소 특성)
 
