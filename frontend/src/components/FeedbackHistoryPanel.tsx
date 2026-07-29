@@ -101,8 +101,8 @@ export function FeedbackHistoryPanel({
                   >
                     {tab === "gap" ? (
                       <ul className="text-text list-disc space-y-1 pl-4.5 text-sm">
-                        {entry.gaps.map((gap) => (
-                          <li key={gap}>{gap}</li>
+                        {entry.gaps.map((gap, i) => (
+                          <li key={`${gap}-${i}`}>{gap}</li>
                         ))}
                       </ul>
                     ) : (
