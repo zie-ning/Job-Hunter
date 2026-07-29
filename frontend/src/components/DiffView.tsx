@@ -50,23 +50,44 @@ function computeLineDiff(oldText: string, newText: string): DiffLine[] {
   return result;
 }
 
+const ROW_CLASSES: Record<DiffLine["type"], string> = {
+  unchanged: "text-text",
+  added: "bg-positive-soft text-positive",
+  removed: "bg-danger-soft text-danger",
+};
+
 export function DiffView({ oldText, newText }: DiffViewProps) {
   const lines = computeLineDiff(oldText, newText);
+  let oldNo = 0;
+  let newNo = 0;
+
   return (
-    <div className="diff-view">
-      {lines.map((line, index) => (
-        <div
-          key={index}
-          className={
-            line.type === "unchanged"
-              ? "diff-line"
-              : `diff-line diff-line-${line.type}`
-          }
-        >
-          {line.type === "added" ? "+ " : line.type === "removed" ? "- " : "  "}
-          {line.text}
-        </div>
-      ))}
+    <div className="border-border overflow-hidden rounded-lg border font-mono text-sm">
+      {lines.map((line, index) => {
+        if (line.type !== "added") oldNo++;
+        if (line.type !== "removed") newNo++;
+        return (
+          <div
+            key={index}
+            className={`flex gap-3 px-1 whitespace-pre-wrap ${ROW_CLASSES[line.type]}`}
+          >
+            <span className="text-text-muted w-5 shrink-0 text-right tabular-nums select-none">
+              {line.type !== "added" ? oldNo : ""}
+            </span>
+            <span className="text-text-muted w-5 shrink-0 text-right tabular-nums select-none">
+              {line.type !== "removed" ? newNo : ""}
+            </span>
+            <span className="select-none">
+              {line.type === "added"
+                ? "+"
+                : line.type === "removed"
+                  ? "-"
+                  : " "}
+            </span>
+            <span>{line.text}</span>
+          </div>
+        );
+      })}
     </div>
   );
 }

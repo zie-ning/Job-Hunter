@@ -15,16 +15,17 @@
   --danger: #a32d2d;
   --danger-bg: rgba(163, 45, 45, 0.1);
   --neutral-muted: #888780;
-  --social-bg: rgba(244, 243, 236, 0.5);
   --shadow:
     rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
 
   --sans: system-ui, "Segoe UI", Roboto, sans-serif;
-  --heading: system-ui, "Segoe UI", Roboto, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
+  /* 루트 font-size는 표준 16px로 둔다 — rem 기반 토큰(theme.css의
+     --container-*, --text-* 등)이 모두 "1rem = 16px" 가정 위에 있어서,
+     여기서 값을 바꾸면 그 토큰들이 전부 조용히 비례 확대/축소된다.
+     본문을 더 크게 보여주고 싶다는 원래 의도는 body의 font-size로
+     옮겨서(아래) rem의 기준 자체는 건드리지 않는다. */
   color-scheme: light dark;
   color: var(--text);
   background: var(--bg);
@@ -32,10 +33,6 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -56,70 +53,65 @@
     --danger: #f09595;
     --danger-bg: rgba(240, 149, 149, 0.15);
     --neutral-muted: #888780;
-    --social-bg: rgba(47, 48, 58, 0.5);
     --shadow:
       rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
   }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
 }
 
+/* #root는 이제 폭을 강제하지 않는다 (예전 Vite 템플릿의
+   width:1126px; text-align:center; border-inline 잔재를 제거).
+   각 페이지가 자신에게 맞는 폭(--container-auth/app/wide)을
+   스스로 선언한다 — frontend/src/layout/AppLayout.tsx,
+   src/components/components.css .app-main/.auth-page 참고 */
 #root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
+  position: relative;
+  z-index: 1;
   min-height: 100svh;
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
 }
 
 body {
   margin: 0;
-}
+  font: 1.125rem/145% var(--sans); /* 18px — 예전 :root의 본문 크기 의도를 유지 */
+  letter-spacing: 0.18px;
+  position: relative;
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
-
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
   @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
+    font-size: 1rem; /* 16px — 작은 화면에서 축소 */
   }
 }
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
+
+/* 배경 분위기 레이어 — 앱 전체에 단 한 곳. 화면 밖에서 번져 들어오게
+   배치해 "그라데이션 배너"처럼 보이지 않게 한다. 카드/버튼 fill에는
+   --bloom-* 토큰을 쓰지 않는다(docs/DESIGN.md §1 금지 규칙) */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(760px 620px at 92% -12%, var(--bloom-1), transparent 62%),
+    radial-gradient(680px 560px at -8% 108%, var(--bloom-2), transparent 60%);
 }
+
+/* 예전에는 여기 h1/h2 블랭킷 규칙이 있어 Tailwind 유틸리티를 명시도와
+   무관하게 이겼다(Preflight의 h1,h2{font-size:inherit} 리셋과 충돌해
+   @layer로 감싸는 시도도 실패했었다 — docs/DESIGN.md §4 참고). Step 6에서
+   모든 페이지가 <div role="heading" aria-level={n}>로 전환을 마치면서
+   이 규칙 자체가 죽은 코드가 되어 삭제했다. 새 화면도 계속 이 패턴을
+   쓴다 — 실제 h1/h2 태그로 되돌릴 실익이 없고, 한 가지 패턴으로
+   통일된 상태가 더 일관적이다. */
 p {
   margin: 0;
 }
 
-code,
-.counter {
+code {
   font-family: var(--mono);
   display: inline-flex;
   border-radius: 4px;
   color: var(--text-h);
-}
-
-code {
   font-size: 15px;
   line-height: 135%;
   padding: 4px 8px;

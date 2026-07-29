@@ -1,15 +1,31 @@
 import type { InputHTMLAttributes } from "react";
+import { Field, FIELD_INPUT_CLASSES } from "./Field";
 
 interface TextFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
+  helperText?: string;
+  error?: string;
 }
 
-export function TextField({ label, id, ...rest }: TextFieldProps) {
-  const inputId = id ?? label;
+export function TextField({
+  label,
+  helperText,
+  error,
+  id,
+  className,
+  ...rest
+}: TextFieldProps) {
   return (
-    <div className="field">
-      <label htmlFor={inputId}>{label}</label>
-      <input id={inputId} {...rest} />
-    </div>
+    <Field
+      label={label}
+      helperText={helperText}
+      error={error}
+      id={id}
+      className={className}
+    >
+      {(inputId) => (
+        <input id={inputId} className={FIELD_INPUT_CLASSES} {...rest} />
+      )}
+    </Field>
   );
 }

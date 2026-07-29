@@ -8,6 +8,12 @@ import { Badge } from "../components/Badge";
 import { Button } from "../components/Button";
 import { EmptyState } from "../components/EmptyState";
 import { ForkPickerModal } from "../components/ForkPickerModal";
+import { Skeleton } from "../components/Skeleton";
+import { ScoreGauge } from "../components/ScoreGauge";
+
+function formatDeadline(iso: string): string {
+  return new Date(iso).toLocaleDateString("ko-KR");
+}
 
 export function MatchesPage() {
   const navigate = useNavigate();
@@ -45,7 +51,17 @@ export function MatchesPage() {
   }
 
   if (matches === null) {
-    return <Card>불러오는 중...</Card>;
+    return (
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        {[0, 1, 2].map((i) => (
+          <Card key={i} className="flex flex-col gap-3">
+            <Skeleton className="h-5 w-2/3" />
+            <Skeleton className="h-4 w-1/3" />
+            <Skeleton className="h-8 w-full" />
+          </Card>
+        ))}
+      </div>
+    );
   }
 
   if (matches.length === 0) {
@@ -58,23 +74,35 @@ export function MatchesPage() {
   }
 
   return (
-    <div className="match-grid">
-      {matches.map((match) => (
-        <Card key={match.id} className="match-card">
-          <div className="match-card-header">
-            <div>
-              <h3>{match.company}</h3>
-              <p className="match-title">{match.title}</p>
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+      {matches.map((match, index) => (
+        <Card
+          key={match.id}
+          style={{ animationDelay: `${index * 40}ms` }}
+          className="animate-fade-up flex h-full flex-col gap-4 motion-reduce:animate-none"
+        >
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0">
+              <h3 className="text-text-strong font-sans text-base font-bold">
+                {match.company}
+              </h3>
+              <p className="text-text mt-0.5 text-sm">{match.title}</p>
             </div>
-            <span className="match-score">{match.matchScore}점</span>
+            <ScoreGauge score={match.matchScore} size={52} />
           </div>
-          <div className="match-skills">
+          <div className="flex flex-wrap gap-1.5">
             {match.skills.map((skill) => (
               <Badge key={skill} tone="neutral">
                 {skill}
               </Badge>
             ))}
           </div>
+          <p className="text-text-muted mt-auto text-xs">
+            마감{" "}
+            <span className="text-warning font-mono font-semibold">
+              {formatDeadline(match.deadline)}
+            </span>
+          </p>
           <Button type="button" onClick={() => handlePrepareApply(match.id)}>
             지원 준비하기
           </Button>
