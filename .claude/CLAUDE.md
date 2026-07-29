@@ -12,7 +12,7 @@
 
 - **백엔드** (`backend/`): Python + FastAPI, 비동기 SQLAlchemy + asyncpg, Alembic 마이그레이션, Postgres(pgvector 확장) — Supabase 호스팅. OpenAI API로 구조화 출력(JD 분석)과 RAG 첨삭 수행.
   - `app/api/routes/` API 엔드포인트, `app/core/` 설정, `app/db/` 세션/연결, `app/models/` ORM 모델, `app/schemas/` Pydantic 스키마, `app/services/` 비즈니스 로직
-- **프론트엔드** (`frontend/`): React 19 + Vite + TypeScript, React Router. 백엔드와 완전히 분리된 SPA (서버 런타임 없음 — 로직이 FastAPI 한 곳에만 존재하도록 하는 설계 결정, ROADMAP.md Phase 0 참고). 린트는 `oxlint` 사용.
+- **프론트엔드** (`frontend/`): React 19 + Vite + TypeScript, React Router. 백엔드와 완전히 분리된 SPA (서버 런타임 없음 — 로직이 FastAPI 한 곳에만 존재하도록 하는 설계 결정, ROADMAP.md Phase 0 참고). 스타일링은 Tailwind CSS v4 기반 디자인 토큰 체계(`docs/DESIGN.md` 참고). 린트는 `oxlint` 사용.
 
 ## 작업 방식 (포트폴리오 저장소 특성)
 
