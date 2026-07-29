@@ -77,6 +77,15 @@
 - [x] 공고 브랜치 상세 화면을 갭분석·첨삭 히스토리 패널 + 공고 메타정보 + 편집기 + 커밋 로그 레이아웃으로 고도화, 상태 변경 UI 포함
 - [x] 공고 달력 화면 신규 추가 (매칭 마감일 표시, 클릭 시 해당 브랜치로 이동)
 - [x] 브랜치 생성 3갈래(지원 준비하기/범용 브랜치 새로 만들기/공고 브랜치 새로 만들기) 흐름 mock 구현
+- [x] 디자인 방향 확정 (프리뷰 3안 비교 후 선택) — 브랜치 목록 화면을 소재로 자기완결 HTML 3안(Soft Periwinkle/Editorial Console/Deep Slate)을 만들어 라이트·다크 양쪽을 실제 렌더링해 비교. "무드는 A, 컴포넌트 구조는 C"로 조합한 D안(Periwinkle Console)으로 확정, 근거는 [docs/DESIGN.md](DESIGN.md) §1 참고
+- [x] Tailwind v4 도입 + 기본 팔레트 제거로 디자인 토큰 단일화 — `theme.css`의 `@theme`에서 `--color-*`/`--font-*`/`--radius-*`/`--shadow-*` 기본값을 `initial`로 지우고 프로젝트 토큰만 정의. 기존 "새 의존성 미도입" 결정을 뒤집은 근거는 [docs/superpowers/specs/2026-07-26-phase2-ui-mock-design.md](superpowers/specs/2026-07-26-phase2-ui-mock-design.md)의 supersede 노트 참고
+- [x] Pretendard 셀프호스팅 + 디스플레이 서체 적용 — Pretendard Variable(약 2.0MB) + Plus Jakarta Sans Bold(약 27KB) woff2를 `frontend/public/fonts/`에 자체 호스팅, `tabular-nums`로 숫자 정렬, 로고 워드마크를 SVG `<text>` 대신 실제 웹폰트로 렌더링하도록 분리
+- [x] 앱 셸/컨테이너 폭 체계 재구성 — Vite 템플릿 잔재(`#root`의 `width:1126px`/`text-align:center`) 제거, 컨테이너 3종(`--container-auth`/`app`/`wide`) 도입, 배경 분위기 레이어를 `body::before` 한 곳으로 통합
+- [x] 공통 컴포넌트 재설계 — Button/Card/Badge/Field 계열을 Tailwind로 재작성하고 `Modal`/`Skeleton`/`Spinner`/`components/icons/`를 신설해 3중 복붙 모달과 산재한 인라인 SVG, `불러오는 중...` 텍스트 로딩 상태를 제거
+- [x] 로그인/회원가입/브랜치 목록·상세/JD 매칭/공고 달력/버전 상세 7개 라우트를 새 디자인 시스템으로 재단 — 라이트·다크·1440px·375px 전 조합과 실제 인터랙션(로그인, 브랜치 생성/저장, 갭분석 요청, fork 모달, 캘린더 이벤트 클릭)을 playwright로 확인
+- [x] `/design` 플레이그라운드 페이지 — `import.meta.env.DEV`에서만 마운트. 색 토큰·타입 스케일·spacing/radius/elevation·모션·모든 컴포넌트의 variant/상태를 한 페이지에서 스크린샷 1장으로 검증 가능
+- [x] 모션 레이어 — 리스트 진입 stagger reveal(`--animate-fade-up`), 카드 hover lift, 스켈레톤 shimmer(`--animate-shimmer`), 모달 fade+scale. 전부 `motion-reduce:` 짝을 붙여 `prefers-reduced-motion` 대응 확인
+- [x] `docs/DESIGN.md` 작성 — 디자인 원칙(AI 티 방지 규칙 7개)·토큰 레퍼런스·컴포넌트 카탈로그·레이아웃 규칙·금지 규칙·신규 화면 체크리스트를 `theme.css`와 1:1 대응시켜 문서화
 
 **완료 기준**: 백엔드 연동 없이, mock 데이터로 채워진 전체 플로우(로그인 → 이력서 관리 → JD 매칭 → 브랜치 → 첨삭 결과)를 처음부터 끝까지 클릭으로 시연할 수 있다.
 
