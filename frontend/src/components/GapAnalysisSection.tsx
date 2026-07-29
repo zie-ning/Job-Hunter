@@ -45,7 +45,7 @@ export function GapAnalysisSection({
             <div
               role="heading"
               aria-level={4}
-              className="text-text-strong font-sans mb-1.5 text-sm font-semibold"
+              className="text-text-strong mb-1.5 font-sans text-sm font-semibold"
             >
               부족한 부분
             </div>
@@ -59,7 +59,7 @@ export function GapAnalysisSection({
             <div
               role="heading"
               aria-level={4}
-              className="text-text-strong font-sans mb-1.5 text-sm font-semibold"
+              className="text-text-strong mb-1.5 font-sans text-sm font-semibold"
             >
               첨삭 피드백
             </div>

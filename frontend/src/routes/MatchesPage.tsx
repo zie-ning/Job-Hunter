@@ -79,7 +79,7 @@ export function MatchesPage() {
         <Card
           key={match.id}
           style={{ animationDelay: `${index * 40}ms` }}
-          className="animate-fade-up motion-reduce:animate-none flex h-full flex-col gap-4"
+          className="animate-fade-up flex h-full flex-col gap-4 motion-reduce:animate-none"
         >
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">

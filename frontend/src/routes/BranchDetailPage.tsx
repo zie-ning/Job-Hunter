@@ -55,12 +55,7 @@ function ReuploadLink({
   return (
     <label className="text-accent hover:text-accent-hover cursor-pointer text-sm font-medium">
       새 파일 업로드
-      <input
-        type="file"
-        accept=".pdf,.doc,.docx"
-        onChange={onUpload}
-        hidden
-      />
+      <input type="file" accept=".pdf,.doc,.docx" onChange={onUpload} hidden />
     </label>
   );
 }

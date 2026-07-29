@@ -13,7 +13,7 @@ export function Skeleton({
   return (
     <div
       className={[
-        "skeleton-shimmer-bg animate-shimmer motion-reduce:animate-none rounded-sm",
+        "skeleton-shimmer-bg animate-shimmer rounded-sm motion-reduce:animate-none",
         className,
       ]
         .filter(Boolean)

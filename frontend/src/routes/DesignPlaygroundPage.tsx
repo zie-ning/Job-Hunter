@@ -185,7 +185,7 @@ export function DesignPlaygroundPage() {
             </Button>
             <div
               key={motionKey}
-              className="animate-fade-scale motion-reduce:animate-none bg-accent-soft text-accent rounded-md px-4 py-2 text-sm font-semibold"
+              className="animate-fade-scale bg-accent-soft text-accent rounded-md px-4 py-2 text-sm font-semibold motion-reduce:animate-none"
             >
               fade-scale (--ease-out-expo)
             </div>
@@ -198,15 +198,15 @@ export function DesignPlaygroundPage() {
                 // Tailwind 클래스로 표현할 수 없는 동적 값이라 인라인
                 // style로 전달한다(docs/DESIGN.md §5 인라인 style 예외)
                 style={{ animationDelay: `${index * 40}ms` }}
-                className="animate-fade-up motion-reduce:animate-none bg-positive-soft text-positive rounded-md px-4 py-2 text-sm font-semibold"
+                className="animate-fade-up bg-positive-soft text-positive rounded-md px-4 py-2 text-sm font-semibold motion-reduce:animate-none"
               >
                 {label}
               </div>
             ))}
           </div>
           <p className="text-text-muted text-xs">
-            fade-up (--animate-fade-up, 40ms stagger) — BranchesPage/MatchesPage의
-            리스트 진입에 쓰인다
+            fade-up (--animate-fade-up, 40ms stagger) —
+            BranchesPage/MatchesPage의 리스트 진입에 쓰인다
           </p>
         </div>
       </Section>

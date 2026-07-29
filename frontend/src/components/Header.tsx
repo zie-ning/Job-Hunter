@@ -61,7 +61,11 @@ export function Header() {
           </NavLink>
         ))}
       </nav>
-      <Button variant="ghost" className="shrink-0 whitespace-nowrap" onClick={logout}>
+      <Button
+        variant="ghost"
+        className="shrink-0 whitespace-nowrap"
+        onClick={logout}
+      >
         로그아웃
       </Button>
     </header>

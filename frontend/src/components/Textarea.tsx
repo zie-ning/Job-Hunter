@@ -26,9 +26,10 @@ export function Textarea({
       {(inputId) => (
         <textarea
           id={inputId}
-          className={[FIELD_INPUT_CLASSES, "min-h-40 resize-y font-mono text-sm"].join(
-            " ",
-          )}
+          className={[
+            FIELD_INPUT_CLASSES,
+            "min-h-40 resize-y font-mono text-sm",
+          ].join(" ")}
           {...rest}
         />
       )}

@@ -225,7 +225,6 @@
   padding: 8px 0;
 }
 
-
 /* 공고 브랜치 상세는 겨냥 JD 정보 레일 + 본문이 나란히 붙어
    .app-main의 기본 폭(--container-app, 960px)보다 넓은 공간이 필요하다.
    페이지가 부모(.app-main)의 max-width 제약을 직접 벗어날 방법이
@@ -325,4 +324,3 @@
     max-width: 100%;
   }
 }
-

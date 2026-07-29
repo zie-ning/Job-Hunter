@@ -213,7 +213,7 @@ export function BranchesPage() {
                 // (ScoreGauge와 동일한 예외, docs/DESIGN.md §5)
                 style={{ animationDelay: `${index * 40}ms` }}
                 className={[
-                  "bg-surface shadow-e1 hover:shadow-e2 animate-fade-up motion-reduce:animate-none min-w-60 shrink-0 rounded-md p-4 transition-[box-shadow,transform] hover:-translate-y-0.5 motion-reduce:hover:translate-y-0",
+                  "bg-surface shadow-e1 hover:shadow-e2 animate-fade-up min-w-60 shrink-0 rounded-md p-4 transition-[box-shadow,transform] hover:-translate-y-0.5 motion-reduce:animate-none motion-reduce:hover:translate-y-0",
                   branch.isDefault
                     ? "ring-accent ring-2"
                     : "ring-border ring-1",
@@ -223,7 +223,7 @@ export function BranchesPage() {
                   {branch.isDefault && (
                     <StarIcon className="text-accent shrink-0" />
                   )}
-                  <span className="text-text-strong font-sans truncate text-sm font-semibold">
+                  <span className="text-text-strong truncate font-sans text-sm font-semibold">
                     {branch.name}
                   </span>
                 </div>
@@ -303,7 +303,7 @@ export function BranchesPage() {
                 <Card
                   elevation="flat"
                   style={{ animationDelay: `${index * 40}ms` }}
-                  className="hover:shadow-e2 animate-fade-up motion-reduce:animate-none flex items-center gap-5 transition-[box-shadow,transform] hover:-translate-y-0.5 motion-reduce:hover:translate-y-0"
+                  className="hover:shadow-e2 animate-fade-up flex items-center gap-5 transition-[box-shadow,transform] hover:-translate-y-0.5 motion-reduce:animate-none motion-reduce:hover:translate-y-0"
                 >
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2.5">

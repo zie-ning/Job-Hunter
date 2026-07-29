@@ -62,7 +62,7 @@ export function FeedbackHistoryPanel({
       </div>
 
       {isPanelOpen && (
-        <div className="feedback-panel-flyout bg-surface shadow-e2 animate-fade-in motion-reduce:animate-none rounded-lg p-4">
+        <div className="feedback-panel-flyout bg-surface shadow-e2 animate-fade-in rounded-lg p-4 motion-reduce:animate-none">
           <button
             type="button"
             aria-label="닫기"

@@ -22,7 +22,8 @@ export function ScoreGauge({ score, size = 64 }: ScoreGaugeProps) {
         style={{
           background: `conic-gradient(${tone} ${score}%, var(--border) 0)`,
           mask: "radial-gradient(farthest-side, transparent 76%, #000 78%)",
-          WebkitMask: "radial-gradient(farthest-side, transparent 76%, #000 78%)",
+          WebkitMask:
+            "radial-gradient(farthest-side, transparent 76%, #000 78%)",
         }}
       />
       <div className="relative text-center leading-none">

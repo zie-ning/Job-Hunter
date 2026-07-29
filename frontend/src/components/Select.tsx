@@ -29,9 +29,10 @@ export function Select({
         <div className="relative">
           <select
             id={inputId}
-            className={[FIELD_INPUT_CLASSES, "cursor-pointer appearance-none pr-8"].join(
-              " ",
-            )}
+            className={[
+              FIELD_INPUT_CLASSES,
+              "cursor-pointer appearance-none pr-8",
+            ].join(" ")}
             {...rest}
           >
             {children}
