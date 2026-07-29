@@ -60,7 +60,7 @@ export function Modal({ title, onClose, wide = false, children }: ModalProps) {
     // components.css의 .modal-content form / .modal-content > .fork-picker
     // 등 폼 레이아웃 규칙이 Step 6 전까지 이 이름으로 대상을 찾는다.
     <div
-      className="modal-overlay animate-fade-in fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/40 p-6 pt-[10vh]"
+      className="modal-overlay animate-fade-in motion-reduce:animate-none fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/40 p-6 pt-[10vh]"
       onClick={onClose}
     >
       <div
@@ -69,7 +69,7 @@ export function Modal({ title, onClose, wide = false, children }: ModalProps) {
         aria-modal="true"
         aria-label={title}
         className={[
-          "modal-content animate-fade-scale bg-surface shadow-e3 w-full rounded-lg p-6",
+          "modal-content animate-fade-scale motion-reduce:animate-none bg-surface shadow-e3 w-full rounded-lg p-6",
           wide ? "max-w-xl" : "max-w-md",
         ].join(" ")}
         onClick={(event) => event.stopPropagation()}

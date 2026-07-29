@@ -162,10 +162,15 @@
 
   /* === 모션 === */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-  /* Modal 전용 진입 애니메이션. 나머지 모션(리스트 stagger, 카드 hover
-     lift, 스켈레톤 shimmer 등)은 Step 7에서 앱 전역에 추가한다 */
   --animate-fade-in: fade-in 0.15s ease-out both;
   --animate-fade-scale: fade-scale 0.18s var(--ease-out-expo) both;
+  /* 리스트 진입 stagger reveal 전용 — 각 항목이 순서대로 아래에서
+     살짝 떠오르며 나타난다. 항목별 지연은 컴포넌트가 인라인
+     animation-delay로 전달한다(ScoreGauge와 동일한 "Tailwind로
+     표현 불가한 동적 값" 예외, docs/DESIGN.md §5) */
+  --animate-fade-up: fade-up 0.4s var(--ease-out-expo) both;
+  /* Skeleton 전용 — 좌우로 스치는 하이라이트 밴드 */
+  --animate-shimmer: shimmer 1.6s ease-in-out infinite;
 
   /* === 컨테이너 폭 — Vite 템플릿 잔재(#root width:1126px)를 대체 === */
   --container-auth: 26rem; /* 416px — 로그인/회원가입 */
@@ -188,5 +193,19 @@
   from {
     opacity: 0;
     transform: scale(0.96) translateY(4px);
+  }
+}
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+@keyframes shimmer {
+  0% {
+    background-position: 150% 0;
+  }
+  100% {
+    background-position: -50% 0;
   }
 }

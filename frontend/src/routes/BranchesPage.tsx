@@ -204,12 +204,16 @@ export function BranchesPage() {
           </p>
         ) : (
           <div className="flex gap-2.5 overflow-x-auto pb-1">
-            {orderedGeneralBranches.map((branch) => (
+            {orderedGeneralBranches.map((branch, index) => (
               <Link
                 key={branch.id}
                 to={`/branches/${branch.id}`}
+                // 리스트 진입 stagger reveal — 항목별 지연은 Tailwind로
+                // 표현할 수 없는 동적 값이라 인라인 style로 전달한다
+                // (ScoreGauge와 동일한 예외, docs/DESIGN.md §5)
+                style={{ animationDelay: `${index * 40}ms` }}
                 className={[
-                  "bg-surface shadow-e1 hover:shadow-e2 min-w-60 shrink-0 rounded-md p-4 transition-shadow",
+                  "bg-surface shadow-e1 hover:shadow-e2 animate-fade-up motion-reduce:animate-none min-w-60 shrink-0 rounded-md p-4 transition-[box-shadow,transform] hover:-translate-y-0.5 motion-reduce:hover:translate-y-0",
                   branch.isDefault
                     ? "ring-accent ring-2"
                     : "ring-border ring-1",
@@ -294,11 +298,12 @@ export function BranchesPage() {
           />
         ) : (
           <div className="flex flex-col gap-2.5">
-            {filteredJdBranches.map(({ branch, match }) => (
+            {filteredJdBranches.map(({ branch, match }, index) => (
               <Link key={branch.id} to={`/branches/${branch.id}`}>
                 <Card
                   elevation="flat"
-                  className="hover:shadow-e2 flex items-center gap-5 transition-shadow"
+                  style={{ animationDelay: `${index * 40}ms` }}
+                  className="hover:shadow-e2 animate-fade-up motion-reduce:animate-none flex items-center gap-5 transition-[box-shadow,transform] hover:-translate-y-0.5 motion-reduce:hover:translate-y-0"
                 >
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2.5">
