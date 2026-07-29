@@ -1,25 +1,14 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { LogoSymbol } from "../components/Header";
 import { KakaoIcon } from "../components/icons";
 
 export function LoginPage() {
-  const { login } = useAuth();
-  const navigate = useNavigate();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { loginWithKakao } = useAuth();
 
-  async function handleKakaoLogin() {
-    setIsSubmitting(true);
-    try {
-      // 카카오 소셜 로그인 mock 액션 실행 후 브랜치 화면으로 이동
-      await login("kakao_user@jobhunter.dev", "kakao-auth-token");
-      navigate("/branches");
-    } catch {
-      // 로그인 오류 발생 시 조치
-    } finally {
-      setIsSubmitting(false);
-    }
+  function handleKakaoLogin() {
+    // 카카오 인가 URL로 페이지 전체를 이동시킨다 (여기서 응답을 기다릴 필요 없음 —
+    // 로그인/동의 완료 후 카카오가 KakaoCallbackPage로 리다이렉트해준다).
+    loginWithKakao();
   }
 
   return (
@@ -48,7 +37,6 @@ export function LoginPage() {
           <button
             type="button"
             onClick={handleKakaoLogin}
-            disabled={isSubmitting}
             className="flex w-full cursor-pointer items-center justify-center gap-2.5 rounded-(--radius-sm) bg-[#FEE500] px-4 py-3.5 font-sans text-sm font-semibold text-[#191919] shadow-sm transition-all duration-150 hover:bg-[#fada0a] active:scale-[0.99] disabled:opacity-60"
           >
             <KakaoIcon size={20} className="fill-[#191919]" />

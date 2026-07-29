@@ -2,6 +2,7 @@ import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AppLayout } from "./layout/AppLayout";
 import { LoginPage } from "./routes/LoginPage";
+import { KakaoCallbackPage } from "./routes/KakaoCallbackPage";
 import { MatchesPage } from "./routes/MatchesPage";
 import { BranchesPage } from "./routes/BranchesPage";
 import { BranchDetailPage } from "./routes/BranchDetailPage";
@@ -22,6 +23,7 @@ function App() {
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/signup" element={<Navigate to="/login" replace />} />
+      <Route path="/auth/kakao/callback" element={<KakaoCallbackPage />} />
       {import.meta.env.DEV && (
         <Route
           path="/design"

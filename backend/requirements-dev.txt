@@ -1,2 +1,7 @@
 -r requirements.txt
+
+pytest
+pytest-asyncio
+aiosqlite
+respx
 ruff

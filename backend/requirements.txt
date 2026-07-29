@@ -8,3 +8,4 @@ pgvector
 python-multipart
 openai
 httpx
+pyjwt
