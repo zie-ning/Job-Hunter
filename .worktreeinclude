@@ -1,3 +1,13 @@
-# .gitignore의 환경변수 섹션과 동일하게 유지
+# .gitignore와 동일하게 유지 (단, .claude/worktrees/는 워크트리 생성 디렉토리
+# 자체를 가리켜 자기참조적으로 동작하므로 제외)
+
+# 환경변수
 .env
 *.env.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Claude Code 로컬 개인 설정
+.claude/settings.local.json
