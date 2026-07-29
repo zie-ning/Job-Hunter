@@ -44,7 +44,7 @@ export function LoginPage() {
         </div>
 
         {/* 카카오 소셜 로그인 전용 버튼 (카드 없이 배경 위 직접 배치) */}
-        <div className="mt-10 w-full max-w-[320px]">
+        <div className="mt-20 w-full max-w-[320px]">
           <button
             type="button"
             onClick={handleKakaoLogin}
