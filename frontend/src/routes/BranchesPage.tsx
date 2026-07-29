@@ -250,16 +250,14 @@ export function BranchesPage() {
           </Button>
         </div>
 
-        <div className="flex flex-wrap items-end gap-2.5">
+        <div className="flex flex-wrap items-center gap-2.5">
           <TextField
-            label="검색"
             placeholder="회사명 또는 기술스택으로 검색"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className="min-w-56 flex-1"
           />
           <Select
-            label="정렬"
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as SortOption)}
             className="min-w-36"
@@ -306,13 +304,20 @@ export function BranchesPage() {
                   className="hover:shadow-e2 animate-fade-up flex items-center gap-5 transition-[box-shadow,transform] hover:-translate-y-0.5 motion-reduce:animate-none motion-reduce:hover:translate-y-0"
                 >
                   <div className="min-w-0 flex-1">
-                    <div className="flex flex-wrap items-center gap-2.5">
-                      <span className="text-text-strong font-sans text-base font-bold">
-                        {match?.company ?? "알 수 없는 공고"}
-                      </span>
-                      <span className="bg-border h-3 w-px" />
-                      <span className="text-text text-sm">{match?.title}</span>
-                      <Badge tone={BRANCH_STATUS_TONE[branch.status]}>
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex min-w-0 items-center gap-2.5">
+                        <span className="text-text-strong font-sans text-base font-bold">
+                          {match?.company ?? "알 수 없는 공고"}
+                        </span>
+                        <span className="bg-border h-3 w-px shrink-0" />
+                        <span className="text-text truncate text-sm">
+                          {match?.title}
+                        </span>
+                      </div>
+                      <Badge
+                        tone={BRANCH_STATUS_TONE[branch.status]}
+                        className="shrink-0"
+                      >
                         {BRANCH_STATUS_LABEL[branch.status]}
                       </Badge>
                     </div>
@@ -336,9 +341,9 @@ export function BranchesPage() {
                         </span>
                       </span>
                       {match && (
-                        <span>
+                        <span className="text-warning font-semibold">
                           마감{" "}
-                          <span className="text-warning font-mono font-semibold">
+                          <span className="font-mono">
                             {formatDate(match.deadline)}
                           </span>
                         </span>

@@ -3,7 +3,7 @@ import { Field, FIELD_INPUT_CLASSES } from "./Field";
 import { ChevronDownIcon } from "./icons";
 
 interface SelectFieldProps extends SelectHTMLAttributes<HTMLSelectElement> {
-  label: string;
+  label?: string;
   helperText?: string;
   error?: string;
 }

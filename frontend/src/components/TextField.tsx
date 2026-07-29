@@ -2,7 +2,7 @@ import type { InputHTMLAttributes } from "react";
 import { Field, FIELD_INPUT_CLASSES } from "./Field";
 
 interface TextFieldProps extends InputHTMLAttributes<HTMLInputElement> {
-  label: string;
+  label?: string;
   helperText?: string;
   error?: string;
 }
