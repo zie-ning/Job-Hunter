@@ -87,15 +87,10 @@
   box-sizing: border-box;
 }
 
+/* BranchForkPicker.tsx의 브랜치 목록 항목에서 아직 이 클래스명을 쓴다 */
 .version-meta {
   color: var(--text);
   font-size: 13px;
-}
-
-.version-detail-page {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
 }
 
 /* modal-overlay/modal-content 자체 시각 스타일은 Modal.tsx가
