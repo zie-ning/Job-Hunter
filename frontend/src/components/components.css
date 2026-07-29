@@ -98,36 +98,6 @@
   gap: 16px;
 }
 
-.match-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 16px;
-}
-.match-card {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.match-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-}
-.match-title {
-  color: var(--text);
-  font-size: 14px;
-  margin: 4px 0 0;
-}
-.match-score {
-  font-weight: 500;
-  color: var(--accent);
-}
-.match-skills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
 /* modal-overlay/modal-content 자체 시각 스타일은 Modal.tsx가
    Tailwind로 직접 적용한다 — 여기 남은 규칙은 그 안의 form/fork-picker
    레이아웃만 담당하는 훅이다 */
