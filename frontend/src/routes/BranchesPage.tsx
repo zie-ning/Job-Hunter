@@ -21,7 +21,7 @@ import { NewBranchModal } from "../components/NewBranchModal";
 import { NewJdBranchModal } from "../components/NewJdBranchModal";
 import { Skeleton } from "../components/Skeleton";
 import { ScoreGauge } from "../components/ScoreGauge";
-import { StarIcon } from "../components/icons";
+import { PinIcon } from "../components/icons";
 
 const STATUS_FILTERS: Array<BranchStatus | "all"> = [
   "all",
@@ -203,7 +203,7 @@ export function BranchesPage() {
             만들어보세요.
           </p>
         ) : (
-          <div className="flex gap-2.5 overflow-x-auto pb-1">
+          <div className="flex gap-3 overflow-x-auto px-1 py-2">
             {orderedGeneralBranches.map((branch, index) => (
               <Link
                 key={branch.id}
@@ -215,13 +215,13 @@ export function BranchesPage() {
                 className={[
                   "bg-surface shadow-e1 hover:shadow-e2 animate-fade-up min-w-60 shrink-0 rounded-md p-4 transition-[box-shadow,transform] hover:-translate-y-0.5 motion-reduce:animate-none motion-reduce:hover:translate-y-0",
                   branch.isDefault
-                    ? "ring-accent ring-2"
-                    : "ring-border ring-1",
+                    ? "border-accent border-2"
+                    : "border-border border",
                 ].join(" ")}
               >
                 <div className="flex items-center gap-1.5">
                   {branch.isDefault && (
-                    <StarIcon className="text-accent shrink-0" />
+                    <PinIcon size={15} className="text-accent shrink-0" />
                   )}
                   <span className="text-text-strong truncate font-sans text-sm font-semibold">
                     {branch.name}

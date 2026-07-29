@@ -127,3 +127,18 @@ export function KakaoIcon(props: IconProps) {
     </svg>
   );
 }
+
+export function PinIcon(props: IconProps) {
+  return (
+    <svg
+      width={props.size || 15}
+      height={props.size || 15}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+      {...props}
+    >
+      <path d="M16 12V4h1V2H7v2h1v8l-2 2v2h5v6h2v-6h5v-2l-2-2z" />
+    </svg>
+  );
+}
