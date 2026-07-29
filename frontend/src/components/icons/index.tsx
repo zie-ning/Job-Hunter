@@ -112,3 +112,18 @@ export function StarIcon(props: IconProps) {
     </IconBase>
   );
 }
+
+export function KakaoIcon(props: IconProps) {
+  return (
+    <svg
+      width={props.size || 18}
+      height={props.size || 18}
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+      {...props}
+    >
+      <path d="M12 3C6.477 3 2 6.477 2 10.765c0 2.766 1.83 5.19 4.606 6.586-.201.751-.726 2.721-.832 3.14-.132.525.193.518.406.377.168-.112 2.678-1.82 3.766-2.556.671.096 1.36.147 2.054.147 5.523 0 10-3.477 10-7.765C22 6.477 17.523 3 12 3z" />
+    </svg>
+  );
+}

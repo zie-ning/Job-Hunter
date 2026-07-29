@@ -14,13 +14,19 @@ const NAV_ITEMS = [
  * 아래 Header에서 실제 self-hosted 폰트로 렌더링해 이 문제를 없앤다.
  * currentColor를 써서 색이 부모 텍스트 색(테마 전환)을 그대로 따른다.
  */
-function LogoSymbol() {
+export function LogoSymbol({
+  size = 26,
+  className = "app-header-logo-symbol",
+}: {
+  size?: number;
+  className?: string;
+}) {
   return (
     <svg
       viewBox="0 0 80 80"
-      width="26"
-      height="26"
-      className="app-header-logo-symbol"
+      width={size}
+      height={size}
+      className={className}
       aria-hidden="true"
     >
       <g
